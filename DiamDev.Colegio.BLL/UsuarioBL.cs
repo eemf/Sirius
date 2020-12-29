@@ -316,7 +316,7 @@ namespace DiamDev.Colegio.BLL
                         }
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 { }
 
                 return UsuarioActual;
