@@ -1,0 +1,97 @@
+﻿@model DiamDev.Colegio.Entities.GradoModel
+
+@{
+    ViewBag.Title = "Notas";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h2>Notas</h2>
+        <hr>
+        <form action="" role="form" id="formaprincipal" name="formaprincipal" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-12">
+                    @if (ViewData.ModelState.Values.Any(x => x.Errors.Count > 0))
+                    {
+                        <div class="alert alert-danger">
+                            <button class="close" data-dismiss="alert">×</button>
+                            <h4 class="alert-heading">Error</h4>
+                            @Html.ValidationSummary(false)
+                        </div>
+                    }
+                    <input type="hidden" id="ColegioId" name="ColegioId" value="@Html.Raw(DiamDev.Colegio.UI.App_Start.CustomHelper.getColegioId())" />                    
+                    <input type="hidden" id="GradoId" name="GradoId" value="@Html.Raw(Model.GradoId)" />
+                    <input type="hidden" id="SeccionId" name="SeccionId" value="@Html.Raw(Model.SeccionId)" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-8">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Grado
+                        </label>
+                        <br />
+                        @(string.IsNullOrWhiteSpace(Model.Grado) ? "No Disponible" : Model.Grado)
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Sección
+                        </label>
+                        <br />
+                        @(string.IsNullOrWhiteSpace(Model.Seccion) ? "No Disponible" : Model.Seccion)
+                    </div>
+                </div>
+            </div>            
+            <hr />
+            @if (Model.Alumnos != null && Model.Alumnos.Count() > 0)
+            {
+                <div class="row">
+                    <div class="col-12">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Alumno(a)</th>                                    
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var Alumno in Model.Alumnos)
+                                {
+                                    <tr>
+                                        <td>@Alumno.Alumno</td>                                        
+                                        <td>
+                                            <span class="table-remove">
+                                                <a title="Notas" target="_blank" href="@Url.Action("Boleta", "Grado", new { id = Alumno.GradoId, seccionId = Alumno.SeccionId, alumnoId = Alumno.AlumnoId })" class="btn btn-primary btn-rounded btn-sm my-0"><i class="fas fa-print"></i></a>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="row">
+                    <div class="col-12">
+                        <h1 class="text-center">No contiene alumnos</h1>
+                    </div>
+                </div>
+            }
+            <div class="row">
+                <p>
+                    <div class="col-12">
+                        <a class="btn btn-danger btn-block" href="javascript:window.history.back();">
+                            Regresar <i class="icon-prev"></i>
+                        </a>
+                    </div>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
+<br />

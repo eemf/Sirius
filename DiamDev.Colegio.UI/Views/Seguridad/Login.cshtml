@@ -1,0 +1,148 @@
+﻿@model DiamDev.Colegio.UI.Models.LoginModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>SIRIUS</title>
+    <!-- start: META -->
+    <meta charset="utf-8" />
+    <!--[if IE]><meta http-equiv='X-UA-Compatible' content="IE=edge,IE=9,IE=8,chrome=1" /><![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta content="Sirius" name="description" />
+    <meta content="Sirius" name="author" />
+    <!-- end: META -->
+    <!--===============================================================================================-->
+    <link rel="shortcut icon" href="~/favicon.ico" />
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Content/Loginv15/vendor/bootstrap/css/bootstrap-grid.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" href="~/Content/AdminLTE/plugins/fontawesome-free/css/all.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Content/Loginv15/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Content/Loginv15/vendor/animate/animate.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Content/Loginv15/vendor/css-hamburgers/hamburgers.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Content/Loginv15/vendor/animsition/css/animsition.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Content/Loginv15/vendor/select2/select2.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Content/Loginv15/vendor/daterangepicker/daterangepicker.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Content/Loginv15/css/util.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/Loginv15/css/main.css">
+    <!--===============================================================================================-->
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <!--===============================================================================================-->
+    <link href="~/Content/toastr.min.css" rel="stylesheet" />
+    <!--===============================================================================================-->
+</head>
+<body>
+
+    <div class="limiter">
+        <div class="container-login100">
+            <div class="wrap-login100">
+                <div class="login100-form-title" style="background-image: url(Content/Loginv15/images/bg-01.jpg);">
+                    <span class="login100-form-title-1">
+                        <i class="fas fa-user"></i> Sirius
+                    </span>
+                </div>
+
+                @using (Html.BeginForm("Login", "Seguridad", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "login100-form validate-form", id = "formaprincipal" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "alert alert-danger alert-dismissible" })
+
+                    <div class="wrap-input100 validate-input m-b-26" data-validate="Usuario es requerido">
+                        <span class="label-input100">Usuario</span>
+                        <input class="input100" type="text" id="Usuario" name="Usuario" placeholder="Usuario" required style="border: 0px #fff solid; border-bottom: 1px #a79d9d solid" autocomplete="off" autofocus>
+                        <span class="focus-input100"></span>
+                    </div>
+
+                    <div class="wrap-input100 validate-input m-b-18" data-validate="Contraseña es requerida">
+                        <span class="label-input100">Contraseña</span>
+                        <input class="input100" type="password" placeholder="Contraseña" id="Password" name="Password" required style="border: 0px #fff solid; border-bottom: 1px #a79d9d solid">
+                        <span class="focus-input100"></span>
+                    </div>
+
+                    <div class="container-login100-form-btn">
+                        <button class="login100-form-btn">
+                            <i class="far fa-paper-plane"></i>&nbsp;Ingresar
+                        </button>
+                    </div>
+                }
+                <b>Powered by Sirius &copy; @DateTime.Today.Year</b>
+            </div>
+        </div>
+    </div>
+
+    <!--===============================================================================================-->
+    <script src="~/Content/Loginv15/vendor/jquery/jquery-3.2.1.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Content/Loginv15/vendor/animsition/js/animsition.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Content/Loginv15/vendor/bootstrap/js/popper.js"></script>
+    <script src="~/Content/Loginv15/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Content/Loginv15/vendor/select2/select2.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Content/Loginv15/vendor/daterangepicker/moment.min.js"></script>
+    <script src="~/Content/Loginv15/vendor/daterangepicker/daterangepicker.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Content/Loginv15/vendor/countdowntime/countdowntime.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Content/Loginv15/js/main.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Scripts/ladda.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Scripts/spin.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Scripts/toastr.min.js"></script>
+    <!--===============================================================================================-->
+    <script type="text/javascript">
+        $(function () {
+            $("#formaprincipal").submit(function (e) {
+                var form = $("#formaprincipal");
+                form.validate();
+                if (form.valid()) {
+                    $("#loading").fadeIn();
+                    var opts = {
+                        lines: 12, // The number of lines to draw
+                        length: 7, // The length of each line
+                        width: 4, // The line thickness
+                        radius: 10, // The radius of the inner circle
+                        color: '#000', // #rgb or #rrggbb
+                        speed: 1, // Rounds per second
+                        trail: 60, // Afterglow percentage
+                        shadow: false, // Whether to render a shadow
+                        hwaccel: false // Whether to use hardware acceleration
+                    };
+                    var target = document.getElementById('loading');
+                    var spinner = new Spinner(opts).spin(target);
+                }
+                else {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
+
+    <div id="loading">
+        <div id="loadingcontent">
+            <p id="loadingspinner">
+                Autenticando...
+            </p>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,47 @@
+﻿@model DiamDev.Colegio.Entities.Alumno
+
+@{
+    ViewBag.Title = "Nuevo Alumno(a)";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h2>Nuevo Alumno(a)</h2>
+        <hr>
+        <form action="" role="form" id="formaprincipal" name="formaprincipal" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-12">
+                    @if (ViewData.ModelState.Values.Any(x => x.Errors.Count > 0))
+                    {
+                        <div class="alert alert-danger">
+                            <button class="close" data-dismiss="alert">×</button>
+                            <h4 class="alert-heading">Error</h4>
+                            @Html.ValidationSummary(false)
+                        </div>
+                    }
+                </div>
+            </div>
+            @Html.Partial("_CreateOrEdit")
+            <div class="row">
+                <p>
+                    <div class="col-6">
+                        <button data-style="slide-down" class="btn btn-primary btn-block" type="submit">
+                            <span class="ladda-label"> Aceptar </span>
+                            <span class="ladda-spinner"></span>
+                            <span class="ladda-progress" style="width: 0px;"></span>
+                        </button>
+                    </div>
+                </p>
+                <p>
+                    <div class="col-6">
+                        <a class="btn btn-danger btn-block" href="javascript:window.history.back();">
+                            Cancelar <i class="icon-prev"></i>
+                        </a>
+                    </div>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
+<br />

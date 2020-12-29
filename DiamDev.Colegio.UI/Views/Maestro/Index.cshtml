@@ -1,0 +1,85 @@
+﻿@model PagedList.IPagedList<DiamDev.Colegio.Entities.Maestro>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Maestro(a) Listado";
+}
+
+<div class="row">
+    <div class="col-3">
+        <a class="btn btn-block btn-primary" href="@Url.Action("Crear", "Maestro")">
+            Nuevo
+            <i class="fas fa-arrow-circle-right"></i>
+        </a>
+    </div>
+</div>
+<br />
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Maestro(a)</h3>
+        <div class="card-tools">
+            <form action="" method="get" class="form-inline">
+                <div class="input-group well">
+                    <input type="text" class="form-control" id="search" name="search" placeholder="Buscar.." value="@Html.Raw(ViewBag.Search)" autocomplete="off" style="margin-bottom: 1px;">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-default">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="card-body table-responsive p-0">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Maestro(a)</th>
+                    <th>#Telefono</th>
+                    <th>Activo</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var Maestro in Model)
+                {
+                    <tr>
+                        <td>@Maestro.Nombre</td>
+                        <td>@(string.IsNullOrWhiteSpace(Maestro.Telefono) ? "No Disponible" : Maestro.Telefono)</td>
+                        <td>@(Maestro.Activo ? "Sí" : "No")</td>
+                        <td>
+                            <span class="table-remove">
+                                <a title="Editar" href="@Url.Action("Editar", "Maestro", new { id = Maestro.MaestroId })" class="btn btn-primary btn-rounded btn-sm my-0"><i class="fas fa-pencil-alt"></i></a>
+                                <a title="Asignación de Cursos" href="@Url.Action("Asignar_Curso", "Maestro", new { id = Maestro.MaestroId })" class="btn btn-primary btn-rounded btn-sm my-0"><i class="fas fa-chalkboard-teacher"></i></a>
+                                <a title="Detalle del Maestro(a)" href="@Url.Action("Detalle", "Maestro", new { id = Maestro.MaestroId })" class="btn btn-primary btn-rounded btn-sm my-0"><i class="fab fa-buffer"></i></a>
+                            </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card-tools">
+    Pagina @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
+
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { search = ViewBag.Search, page, @class = "page-item" }))
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function ()
+        {
+            if ('@TempData["Maestro-Success"]' == "OK")
+            {
+                toastr.success('El maestro(a) se guardó exitosamente');
+            }
+            else  if ('@TempData["Maestro_Curso-Success"]' == "OK")
+            {
+                toastr.success('Se asignaron los cursos al maestro(a) exitosamente');
+            }          
+        });
+    </script>
+}

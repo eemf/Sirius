@@ -1,0 +1,85 @@
+﻿@model DiamDev.Colegio.Entities.Inscripcion
+
+<div class="row">
+    <div class="col-12">       
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <label class="control-label">
+                        Alumno(a)
+                    </label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="BuscarAlumno" name="BuscarAlumno" autocomplete="off" placeholder="Buscar Alumno(a)..." autofocus>
+                        <div class="input-group-append">
+                            <button id="btnBuscarAlumno" type="button" class="btn btn-default">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <label class="control-label">
+                        Alumno(a)<span class="symbol required"></span>
+                    </label>
+                    <input type="text" placeholder="Alumno(a)" class="form-control" id="NombreAlumno" name="NombreAlumno" autocomplete="off" disabled="disabled" required />
+                    <input type="hidden" id="AlumnoId" name="AlumnoId" value="0" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">
+                Ciclo Escolar<span class="symbol required"></span>
+            </label>
+            @Html.DropDownList("CicloId", (SelectList)ViewBag.Ciclos, "Seleccione un Ciclo Escolar", new { @class = "form-control select2bs4 required" })
+        </div>
+        <div class="form-group">
+            <label class="control-label">
+                Nivel Academico<span class="symbol required"></span>
+            </label>
+            @Html.DropDownList("NivelAcademicoId", (SelectList)ViewBag.Niveles, "Seleccione un Nivel Academico", new { @class = "form-control select2bs4 required" })
+        </div>
+        <div class="form-group">
+            <label class="control-label">
+                Jornada<span class="symbol required"></span>
+            </label>
+            @Html.DropDownList("JornadaId", (SelectList)ViewBag.Jornadas, "Seleccione una Jornada", new { @class = "form-control select2bs4 required" })
+        </div>
+        <div class="form-group">
+            <label class="control-label">
+                Grado<span class="symbol required"></span>
+            </label>
+            <select id="GradoId" name="GradoId" class="form-control select2bs4" required>
+                <option value="">--Seleccione un Grado--</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="control-label">
+                Seccion<span class="symbol required"></span>
+            </label>
+            @Html.DropDownList("SeccionId", (SelectList)ViewBag.Secciones, "Seleccione una Seccion", new { @class = "form-control select2bs4 required" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-6">
+        <div class="form-group">
+            <label class="control-label">
+                Activo
+            </label>
+            <div>
+                <label class="radio-inline">
+                    <input type="radio" class="grey" value="true" @ViewBag.ActivoSi name="activo" id="ActivoSi">
+                    Sí
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" class="grey" value="false" @ViewBag.ActivoNo name="activo" id="ActivoNo">
+                    No
+                </label>
+            </div>
+        </div>
+    </div>
+</div>

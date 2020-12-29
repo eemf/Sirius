@@ -1,0 +1,32 @@
+﻿@model DiamDev.Colegio.Entities.Ciclo
+
+<div class="row">
+    <div class="col-12">
+        <div class="form-group">
+            <label class="control-label">
+                Ciclo<span class="symbol required"></span>
+            </label>
+            @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @placeholder = "Nombre del Ciclo", required = "required", autocomplete = "off" })
+        </div>      
+    </div>
+</div>
+<div class="row">
+    <div class="col-6">
+        <div class="form-group">
+            <label class="control-label">
+                Activo
+            </label>
+            <div>
+                <label class="radio-inline">
+                    <input type="radio" class="grey" value="true" @ViewBag.ActivoSi name="activo" id="ActivoSi">
+                    Sí
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" class="grey" value="false" @ViewBag.ActivoNo name="activo" id="ActivoNo">
+                    No
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,48 @@
+﻿@model PagedList.IPagedList<DiamDev.Colegio.Entities.AlumnoxResponsable>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Alumnos";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Alumnos</h3>
+    </div>
+    <div class="card-body table-responsive p-0">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Ciclo</th>
+                    <th>Alumno(a)</th>
+                    <th>Grado</th>
+                    <th>Sección</th>                    
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var Curso in Model)
+                {
+                    <tr>
+                        <td>@Curso.Ciclo</td>
+                        <td>@Curso.Alumno</td>
+                        <td>@Curso.Grado</td>
+                        <td>@Curso.Seccion</td>                        
+                        <td>
+                            <span class="table-remove">
+                                <a title="Alumno x Curso" href="@Url.Action("Alumno_x_Curso", "Encargado", new { id = Curso.AlumnoId })" class="btn btn-primary btn-rounded btn-sm my-0"><i class="fas fa-list"></i></a>
+                                <a title="Notas" target="_blank" href="@Url.Action("Nota", "Encargado", new { id = Curso.GradoId, seccionId = Curso.SeccionId, alumnoId = Curso.AlumnoId })" class="btn btn-primary btn-rounded btn-sm my-0"><i class="fas fa-print"></i></a>
+                            </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card-tools">
+    Pagina @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
+
+    @Html.PagedListPager(Model, page => Url.Action("Alumno", new { page, @class = "page-item" }))
+</div>

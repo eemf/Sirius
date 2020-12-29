@@ -1,0 +1,371 @@
+﻿@model DiamDev.Colegio.Entities.CursoMaestroModel
+
+@{
+    ViewBag.Title = "Notas x Curso";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h2>Notas</h2>
+        <hr>
+        <form action="" role="form" id="formaprincipal" name="formaprincipal" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-12">
+                    @if (ViewData.ModelState.Values.Any(x => x.Errors.Count > 0))
+                    {
+                        <div class="alert alert-danger">
+                            <button class="close" data-dismiss="alert">×</button>
+                            <h4 class="alert-heading">Error</h4>
+                            @Html.ValidationSummary(false)
+                        </div>
+                    }
+                    <input type="hidden" id="ColegioId" name="ColegioId" value="@Html.Raw(DiamDev.Colegio.UI.App_Start.CustomHelper.getColegioId())" />
+                    <input type="hidden" id="CursoId" name="CursoId" value="@Html.Raw(Model.CursoId)" />
+                    <input type="hidden" id="GradoId" name="GradoId" value="@Html.Raw(Model.GradoId)" />
+                    <input type="hidden" id="SeccionId" name="SeccionId" value="@Html.Raw(Model.SeccionId)" />
+
+                    <input type="hidden" id="ActividadId" value="0" />
+                    <input type="hidden" id="AlumnoId" value="0" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Curso
+                        </label>
+                        <br />
+                        @(string.IsNullOrWhiteSpace(Model.Curso) ? "No Disponible" : Model.Curso)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Grado
+                        </label>
+                        <br />
+                        @(string.IsNullOrWhiteSpace(Model.Grado) ? "No Disponible" : Model.Grado)
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Sección
+                        </label>
+                        <br />
+                        @(string.IsNullOrWhiteSpace(Model.Seccion) ? "No Disponible" : Model.Seccion)
+                    </div>
+                </div>
+            </div>
+            <hr />
+            @if (Model.Cuadros != null && Model.Cuadros.Count() > 0)
+            {
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card card-primary card-tabs">
+                            <div class="card-header p-0 pt-1">
+                                <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                                    @foreach (var itemUnidad in Model.Cuadros.Select(x => x.Unidad).Distinct())
+                                    {
+                                        <li class="nav-item">
+                                            <a class="nav-link @(itemUnidad.Equals("Unidad I") ? "active" : "")" id="@string.Format("custom-tabs-{0}-tab",itemUnidad.ToLower().Replace(" ","-"))" data-toggle="pill" href="@string.Format("#custom-tabs-{0}",itemUnidad.ToLower().Replace(" ","-"))" role="tab" aria-controls="@string.Format("custom-tabs-{0}",itemUnidad.ToLower().Replace(" ","-"))" aria-selected="@(itemUnidad.Equals("Unidad I") ? true : false)">@itemUnidad</a>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                            <div class="card-body">
+                                <div class="tab-content" id="custom-tabs-one-tabContent">
+                                    @foreach (var itemUnidad in Model.Cuadros.Select(x => x.Unidad).Distinct())
+                                    {
+                                        <div class="tab-pane fade show @(itemUnidad.Equals("Unidad I") ? "active" : "")" id="@string.Format("custom-tabs-{0}",itemUnidad.ToLower().Replace(" ","-"))" role="tabpanel" aria-labelledby="@string.Format("custom-tabs-{0}-tab",itemUnidad.ToLower().Replace(" ","-"))">
+                                            <table class="table table-hover table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th>
+                                                            Alumno(a)
+                                                        </th>
+                                                        @foreach (var itemActividad in Model.Cuadros.Where(x => x.Unidad.Equals(itemUnidad)).Select(x => x.Actividad).Distinct())
+                                                        {
+                                                            <th>
+                                                                @itemActividad
+                                                            </th>
+                                                            <th />
+                                                        }
+                                                        <th>
+                                                            Total
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var itemAlumno in Model.Cuadros.Where(x => x.Unidad.Equals(itemUnidad)).Select(x => x.Alumno).Distinct())
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                @itemAlumno
+                                                            </td>
+                                                            @foreach (var itemNota in Model.Cuadros.Where(x => x.Unidad.Equals(itemUnidad) && x.Alumno.Equals(itemAlumno)))
+                                                            {
+                                                                <td>
+                                                                    @string.Format("{0:F}/{1:F}", itemNota.Nota, itemNota.NotaActividad)
+                                                                </td>
+                                                                <td>
+                                                                    <a title="Agregar Nota" href="javascript:void(0);" onclick="agregarNota(@itemNota.ActividadId,@itemNota.AlumnoId);" class="btn btn-primary btn-rounded btn-sm my-0"><i class="fas fa-pencil-alt"></i></a>
+                                                                    <input type="hidden" id="@string.Format("alumno_{0}_{1}", itemNota.ActividadId, itemNota.AlumnoId)" value="@itemAlumno" />
+                                                                    <input type="hidden" id="@string.Format("unidad_{0}_{1}", itemNota.ActividadId, itemNota.AlumnoId)" value="@itemNota.Unidad" />
+                                                                    <input type="hidden" id="@string.Format("actividad_{0}_{1}", itemNota.ActividadId, itemNota.AlumnoId)" value="@itemNota.Actividad" />
+                                                                    <input type="hidden" id="@string.Format("nota_actividad_{0}_{1}", itemNota.ActividadId, itemNota.AlumnoId)" value="@itemNota.NotaActividad" />
+                                                                    <input type="hidden" id="@string.Format("fecha_actividad_{0}_{1}", itemNota.ActividadId, itemNota.AlumnoId)" value="@itemNota.FechaEntrega.ToString("dd/MM/yyyy")" />
+                                                                    <input type="hidden" id="@string.Format("nota_{0}_{1}", itemNota.ActividadId, itemNota.AlumnoId)" value="@itemNota.Nota" />
+                                                                </td>
+                                                            }
+                                                            <td>
+                                                                @string.Format("{0:F}/{1:F}", Model.Cuadros.Where(x => x.Unidad.Equals(itemUnidad) && x.Alumno.Equals(itemAlumno)).Sum(x => x.Nota), Model.Cuadros.Where(x => x.Unidad.Equals(itemUnidad) && x.Alumno.Equals(itemAlumno)).Sum(x => x.NotaActividad))
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="row">
+                    <div class="col-12">
+                        <h1 class="text-center">No contiene actividades</h1>
+                    </div>
+                </div>
+            }
+            <div class="row">
+                <p>
+                    <div class="col-12">
+                        <a class="btn btn-danger btn-block" href="@Url.Action("Curso", "Maestro")">
+                            Regresar <i class="icon-prev"></i>
+                        </a>
+                    </div>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
+<br />
+
+<div class="modal fade" id="nueva-nota-form" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Agregar Nota</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Alumno(a)
+                            </label>
+                            <br />
+                            <div id="divAlumno"></div>
+                        </div>                                                
+                        <div class="form-group">
+                            <label class="control-label">
+                                Actividad
+                            </label>
+                            <br />
+                            <div id="divActividad"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Nota Maxima de Actividad
+                            </label>
+                            <br />
+                            <div id="divNotaActividad"></div>
+                        </div>                      
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Fecha de Entrega
+                            </label>
+                            <br />
+                            <div id="divFechaActividad"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Nota
+                            </label>
+                            <br />
+                            <input type="text" class="form-control" id="txtNota" autocomplete="off" autofocus />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Comentario
+                            </label>
+                            <br />                            
+                            <textarea class="form-control" id="txtComentario" autocomplete="off"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btn-Guardar-Nota" type="button" class="btn btn-primary btn-block">Guardar</button>
+                <button type="button" class="btn btn-danger btn-block" data-dismiss="modal">Salir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(function ()
+        {
+            function error(texto)
+            {
+                toastr.error(texto);
+            }
+
+            $("#btn-Guardar-Nota").click(function (e)
+            {
+                e.preventDefault();
+
+                var ActividadId = $("#ActividadId").val();
+                if (ActividadId === "")
+                {
+                    error("La actividad es requerida");
+                    return;
+                }
+
+                var AlumnoId = $("#AlumnoId").val();
+                if (AlumnoId === "")
+                {
+                    error("El alumno es requerido");
+                    return;
+                }
+
+                ActividadId = parseInt(ActividadId);
+                if (ActividadId === 0)
+                {
+                    error("La actividad es requerida");
+                    return;
+                }
+
+                AlumnoId = parseInt(AlumnoId);
+                if (AlumnoId === 0)
+                {
+                    error("El alumno es requerido");
+                    return;
+                }
+
+                var notaActividad = $("#nota_actividad_" + ActividadId + '_' + AlumnoId).val();
+
+                var Nota = $("#txtNota").val();
+                if (Nota === "")
+                {
+                    error("La nota de la actividad es requerida");
+                    return;
+                }
+
+                notaActividad = parseFloat(notaActividad);
+                Nota = parseFloat(Nota);
+
+                if (Nota < 0)
+                {
+                    error("La nota de la actividad debe ser mayor o igual a 0");
+                    return;
+                }
+
+                if (Nota > notaActividad)
+                {
+                    error("La nota de la actividad no es valida, verificar nota maxima");
+                    return;
+                }
+
+                var Comentario = $("#txtComentario").val();
+
+                var modelo =
+                {
+                    'ActividadId': ActividadId,
+                    'AlumnoId': AlumnoId,
+                    'Nota': Nota,
+                    'Comentario': Comentario
+                };
+
+                $.ajax({
+                    url: '@Url.Action("GuardarNota", "Maestro")',
+                    data: { 'modelo': modelo },
+                    async: false,
+                    type: 'POST',
+                    success: function (data)
+                    {
+                        if (data.Operacion)
+                        {
+                            toastr.success('La nota del alumno(a) se registro exitosamente');
+
+                            setTimeout(function ()
+                            {
+                                window.location.reload();
+                            }, 1000);
+                        }
+                        else
+                        {
+                            toastr.error('La nota del alumno(a) no se registro en el sistema');
+                        }
+                    }
+                });
+
+            });
+        });
+
+        function agregarNota(actividadId, alumnoId)
+        {
+            $("#ActividadId").val(0);
+            $("#AlumnoId").val(0);
+
+            $("#txtNota").val("");
+            $("#txtComentario").val("");
+
+            $("#ActividadId").val(actividadId);
+            $("#AlumnoId").val(alumnoId);
+
+            var alumno = $("#alumno_" + actividadId + '_' + alumnoId).val();
+            var actividad = $("#actividad_" + actividadId + '_' + alumnoId).val();
+            var notaActividad = $("#nota_actividad_" + actividadId + '_' + alumnoId).val();
+            var fechaActividad = $("#fecha_actividad_" + actividadId + '_' + alumnoId).val();
+            var nota = $("#nota_" + actividadId + '_' + alumnoId).val();
+
+            $("#divAlumno").html(alumno);
+            $("#divActividad").html(actividad);
+            $("#divNotaActividad").html(notaActividad);
+            $("#divFechaActividad").html(fechaActividad);
+
+            $("#txtNota").val(nota);
+
+            $("#txtNota").attr({
+                "max": notaActividad,
+                "min": 0
+            });
+
+            $('#nueva-nota-form').modal('show');
+        }
+    </script>
+}

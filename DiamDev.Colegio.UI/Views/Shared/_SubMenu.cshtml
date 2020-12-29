@@ -1,0 +1,38 @@
+﻿@model IEnumerable<DiamDev.Colegio.Entities.Menu>
+
+@if (Model != null)
+{
+    foreach (var item in Model)
+    {
+        <li class="nav-item">
+
+            @if (string.IsNullOrWhiteSpace(item.Action) && string.IsNullOrWhiteSpace(item.Controller))
+            {
+                <a href="javascript:void(0)" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>
+                        @(item.Titulo)
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
+                </a>
+            }
+            else
+            {
+                <a href="@Url.Action(item.Action, item.Controller)" class="nav-link">
+                     <i class="far fa-circle nav-icon"></i>
+                     <p>
+                         @(item.Titulo)                         
+                     </p>
+                </a>
+            }           
+
+            @if (item.Items != null)
+            {
+                <ul class="nav nav-treeview">
+                    @Html.Partial("_SubMenu", item.Items)
+                </ul>
+            }
+            
+        </li>
+    }
+}

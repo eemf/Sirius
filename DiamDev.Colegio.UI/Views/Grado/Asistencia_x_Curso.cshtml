@@ -1,0 +1,51 @@
+﻿@model IEnumerable<DiamDev.Colegio.Entities.NotaxCursoModel>
+
+@{
+    ViewBag.Title = "Notas Por Curso";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Cursos</h3>
+    </div>
+    <div class="card-body table-responsive p-0">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Ciclo</th>
+                    <th>Curso</th>
+                    <th>Grado</th>
+                    <th>Sección</th>
+                    <th>Alumnos</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var Curso in Model)
+                {
+                    <tr>
+                        <td>@Curso.Ciclo</td>
+                        <td>@Curso.Curso</td>
+                        <td>@Curso.Grado</td>
+                        <td>@Curso.Seccion</td>
+                        <td>@Curso.Alumno</td>
+                        <td>
+                            <span class="table-remove">
+                                <a title="Cuadro de Asistencias" href="@Url.Action("Cuadro_x_Asistencia", "Grado", new { id = Curso.GradoId, seccionId = Curso.SeccionId, cursoId = Curso.CursoId, fecha = DateTime.Today.ToString("yyyy-MM-dd") })" class="btn btn-primary btn-rounded btn-sm my-0"><i class="fas fa-book-reader"></i></a>
+                            </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row">
+    <p>
+        <div class="col-12">
+            <a class="btn btn-danger btn-block" href="javascript:window.history.back();">
+                Regresar <i class="icon-prev"></i>
+            </a>
+        </div>
+    </p>
+</div>

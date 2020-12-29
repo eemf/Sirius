@@ -1,0 +1,80 @@
+﻿@model DiamDev.Colegio.Entities.Usuario
+
+<div class="row">
+    <div class="col-12">
+        @if (DiamDev.Colegio.UI.App_Start.CustomHelper.getUsuarioId() == 20200928001)
+        {
+            <div class="form-group">
+                <label class="control-label">
+                    Colegio<span class="symbol required"></span>
+                </label>
+                @Html.DropDownList("ColegioId", (SelectList)ViewBag.Colegios, "Seleccione un Colegio", new { @class = "form-control select2bs4 required" })
+            </div>
+        }
+        else
+        { 
+            <input type="hidden" id="ColegioId" name="ColegioId" value="@DiamDev.Colegio.UI.App_Start.CustomHelper.getColegioId()" />
+        }
+        <div class="form-group">
+            <label class="control-label">
+                Rol<span class="symbol required"></span>
+            </label>
+            @Html.DropDownList("RolId", (SelectList)ViewBag.Roles, "Seleccione un Rol", new { @class = "form-control select2bs4 required" })
+        </div>
+        <div class="form-group">
+            <label class="control-label">
+                Nombre<span class="symbol required"></span>
+            </label>
+            @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @placeholder = "Nombre del Usuario", required = "required", autocomplete = "off" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-6">
+        <div class="form-group">
+            <label class="control-label">
+                Usuario<span class="symbol required"></span>
+            </label>
+            @Html.TextBoxFor(model => model.Login, new { @class = "form-control", @placeholder = "Usuario", required = "required", autocomplete = "off" })
+        </div>       
+        <div class="form-group">
+            <label class="control-label">
+                Activo
+            </label>
+            <div>
+                <label class="radio-inline">
+                    <input type="radio" class="grey" value="true" @ViewBag.ActivoSi name="activo" id="ActivoSi">
+                    Sí
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" class="grey" value="false" @ViewBag.ActivoNo name="activo" id="ActivoNo">
+                    No
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="form-group">
+            <label class="control-label">
+                Password<span class="symbol required"></span>
+            </label>
+            @Html.PasswordFor(model => model.Password, new { @class = "form-control", @placeholder = "Password", required = "required" })
+        </div>       
+        <div class="form-group">
+            <label class="control-label">
+                Reiniciar Password
+            </label>
+            <div>
+                <label class="radio-inline">
+                    <input type="radio" class="grey" value="true" @ViewBag.ReiniciarPasswordSi name="reiniciarPassword" id="ReiniciarPasswordSi">
+                    Sí
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" class="grey" value="false" @ViewBag.ReiniciarPasswordNo name="reiniciarPassword" id="ReiniciarPasswordNo">
+                    No
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+

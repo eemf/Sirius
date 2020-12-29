@@ -1,0 +1,86 @@
+﻿@model PagedList.IPagedList<DiamDev.Colegio.Entities.Encargado>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Encargado(a) Listado";
+}
+
+<div class="row">
+    <div class="col-3">
+        <a class="btn btn-block btn-primary" href="@Url.Action("Crear", "Encargado")">
+            Nuevo
+            <i class="fas fa-arrow-circle-right"></i>
+        </a>
+    </div>
+</div>
+<br />
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Encargado(a)</h3>
+        <div class="card-tools">
+            <form action="" method="get" class="form-inline">
+                <div class="input-group well">
+                    <input type="text" class="form-control" id="search" name="search" placeholder="Buscar.." value="@Html.Raw(ViewBag.Search)" autocomplete="off" style="margin-bottom: 1px;">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-default">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="card-body table-responsive p-0">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Tipo de Encargado</th>
+                    <th>Encargado(a)</th>
+                    <th>#Telefono Celular</th>
+                    <th>#Telefono Casa</th>
+                    <th>#Telefono Oficina</th>
+                    <th>Activo</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var Encargado in Model)
+                {
+                    <tr>
+                        <td>@(Encargado.Tipo == null ? "No Disponible" : Encargado.Tipo.Nombre)</td>
+                        <td>@Encargado.Nombre</td>
+                        <td>@(string.IsNullOrWhiteSpace(Encargado.TelefonoCelular) ? "No Disponible" : Encargado.TelefonoCelular)</td>
+                        <td>@(string.IsNullOrWhiteSpace(Encargado.TelefonoCasa) ? "No Disponible" : Encargado.TelefonoCasa)</td>
+                        <td>@(string.IsNullOrWhiteSpace(Encargado.TelefonoOficina) ? "No Disponible" : Encargado.TelefonoOficina)</td>
+                        <td>@(Encargado.Activo ? "Sí" : "No")</td>
+                        <td>
+                            <span class="table-remove">
+                                <a title="Editar" href="@Url.Action("Editar", "Encargado", new { id = Encargado.EncargadoId })" class="btn btn-primary btn-rounded btn-sm my-0"><i class="fas fa-pencil-alt"></i></a>
+                                <a title="Detalle del Encargado(a)" href="@Url.Action("Detalle", "Encargado", new { id = Encargado.EncargadoId })" class="btn btn-primary btn-rounded btn-sm my-0"><i class="fab fa-buffer"></i></a>
+                            </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card-tools">
+    Pagina @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
+
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { search = ViewBag.Search, page, @class = "page-item" }))
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function ()
+        {
+            if ('@TempData["Encargado-Success"]' == "OK")
+            {
+                toastr.success('El encargado(a) se guardó exitosamente');
+            }
+        });
+    </script>
+}

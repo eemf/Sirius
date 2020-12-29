@@ -1,0 +1,206 @@
+﻿@model DiamDev.Colegio.Entities.Maestro
+
+@{
+    ViewBag.Title = "Detalle del Maestro(a)";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h2>Detalle del Maestro(a)</h2>
+        <hr>
+        <form action="" role="form" id="formaprincipal" name="formaprincipal" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-12">
+                    @if (ViewData.ModelState.Values.Any(x => x.Errors.Count > 0))
+                    {
+                        <div class="alert alert-danger">
+                            <button class="close" data-dismiss="alert">×</button>
+                            <h4 class="alert-heading">Error</h4>
+                            @Html.ValidationSummary(false)
+                        </div>
+                    }
+                    <input type="hidden" id="MaestroId" name="MaestroId" value="@Html.Raw(Model.MaestroId)" />
+                    <input type="hidden" id="ColegioId" name="ColegioId" value="@Html.Raw(Model.ColegioId)" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Primer Nombre
+                        </label>
+                        <br />
+                        @(string.IsNullOrWhiteSpace(Model.PrimerNombre) ? "No Disponible" : Model.PrimerNombre)
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">
+                            Primer Apellido
+                        </label>
+                        <br />
+                        @(string.IsNullOrWhiteSpace(Model.PrimerApellido) ? "No Disponible" : Model.PrimerApellido)
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Segundo Nombre
+                        </label>
+                        <br />
+                        @(string.IsNullOrWhiteSpace(Model.SegundoNombre) ? "No Disponible" : Model.SegundoNombre)
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">
+                            Segundo Apellido
+                        </label>
+                        <br />
+                        @(string.IsNullOrWhiteSpace(Model.SegundoApellido) ? "No Disponible" : Model.SegundoApellido)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Fecha de Nacimiento
+                        </label>
+                        <br />
+                        @Model.FechaNacimiento.ToString("yyyy-MM-dd")
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Genero
+                        </label>
+                        <br />
+                        @(Model.Genero == null ? "No Disponible" : Model.Genero.Nombre)
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Estado Civil
+                        </label>
+                        <br />
+                        @(Model.EstadoCivil == null ? "No Disponible" : Model.EstadoCivil.Nombre)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Lugar de Nacimiento
+                        </label>
+                        <br />
+                        @Model.LugarNacimiento
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">
+                            Profesión u Oficio
+                        </label>
+                        <br />
+                        @Model.Profesion
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">
+                            Dirección
+                        </label>
+                        <br />
+                        @Model.Direccion
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">
+                            #Telefono del Maestro(a)
+                        </label>
+                        <br />
+                        @(string.IsNullOrWhiteSpace(Model.Telefono) ? "No contiene #telefono" : Model.Telefono)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Observaciones
+                        </label>
+                        <br />
+                        @(string.IsNullOrWhiteSpace(Model.Observaciones) ? "No contiene observaciones" : Model.Observaciones)
+                    </div>
+                </div>
+            </div>
+            <h2>Usuario</h2>
+            <hr />
+            <div class="row">
+                <div class="col-8">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Usuario
+                        </label>
+                        <br />
+                        @(Model.Usuario == null ? "No Disponible" : Model.Usuario.Login)
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label class="control-label">
+                            F. Ultima Actividad
+                        </label>
+                        <br />
+                        @(Model.Usuario == null ? "No Disponible" : (Model.Usuario.FechaUltimaActividad == null ? "No Disponible" : Model.Usuario.FechaUltimaActividad.Value.ToString("dd/MM/yyyy hh:mm tt")))
+                    </div>
+                </div>
+            </div>
+            <h2>Cursos</h2>
+            <div class="row">
+                <div class="col-12">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Grado</th>
+                                <th>Sección</th>
+                                <th>Curso</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Cursos != null && Model.Cursos.Count() > 0)
+                            {
+                                foreach (var Curso in Model.Cursos)
+                                {
+                                    <tr>
+                                        <td>@(Curso.Grado == null ? "No Disponible" : (Curso.Grado.Jornada == null ? "No Disponible" : string.Format("{0} - {1}", Curso.Grado.Nombre, Curso.Grado.Jornada.Nombre)))</td>
+                                        <td>@(Curso.Seccion == null ? "No Disponible" : Curso.Seccion.Nombre)</td>
+                                        <td>@(Curso.Curso == null ? "No Disponible" : Curso.Curso.Nombre)</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="3">
+                                        <h1>Le informamos que el maestro(a) no contiene cursos</h1>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <p>
+                    <div class="col-12">
+                        <a class="btn btn-danger btn-block" href="javascript:window.history.back();">
+                            Regresar <i class="icon-prev"></i>
+                        </a>
+                    </div>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
+<br />

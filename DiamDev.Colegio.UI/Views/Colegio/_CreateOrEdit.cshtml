@@ -1,0 +1,107 @@
+﻿@model DiamDev.Colegio.Entities.Colegio
+
+<div class="row">
+    <div class="col-12">
+        <div class="form-group">
+            <label class="control-label">
+                Colegio<span class="symbol required"></span>
+            </label>
+            @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @placeholder = "Nombre del Colegio", required = "required", autocomplete = "off" })
+        </div>
+        <div class="form-group">
+            <label class="control-label">
+                Dirección<span class="symbol required"></span>
+            </label>
+            @Html.TextAreaFor(model => model.Direccion, new { @class = "form-control", @placeholder = "Dirección del Colegio", required = "required", autocomplete = "off" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-6">
+        <div class="form-group">
+            <label class="control-label">
+                Alias del Colegio<span class="symbol required"></span>
+            </label>
+            @Html.TextBoxFor(model => model.Alias, new { @class = "form-control", @placeholder = "Alias del Colegio", required = "required", autocomplete = "off" })
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="form-group">
+            <label>#Telefono del Colegio</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                </div>
+                @Html.TextBoxFor(model => model.Telefono, new { @class = "form-control input-mask-phone", @placeholder = "#Telefono del Colegio", autocomplete = "off" })
+            </div>
+        </div>       
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="form-group">
+            <label class="control-label">
+                Contacto<span class="symbol required"></span>
+            </label>
+            @Html.TextBoxFor(model => model.Contacto, new { @class = "form-control", @placeholder = "Contacto del Colegio", required = "required", autocomplete = "off" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-6">
+        <div class="form-group">
+            <label>#Telefono Contacto</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                </div>
+                @Html.TextBoxFor(model => model.TelefonoContacto, new { @class = "form-control input-mask-phone", @placeholder = "#Telefono Contacto", required = "required", autocomplete = "off" })
+            </div>
+        </div>       
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <label class="control-label">
+            Logo
+        </label>
+        <div class="fileupload fileupload-new" data-provides="fileupload">
+            <div class="input-group">
+                <div class="form-control uneditable-input">
+                    <i class="icon-file fileupload-exists"></i>
+                    <span class="fileupload-preview"></span>
+                </div>
+                <div class="input-group-btn">
+                    <div class="btn btn-light-grey btn-file">
+                        <span class="fileupload-new"><i class="icon-folder-open-alt"></i>Seleccionar Logo</span>
+                        <span class="fileupload-exists"><i class="icon-folder-open-alt"></i>Cambiar</span>
+                        <input type="file" class="file-input" id="logoApp" name="logoApp">
+                    </div>
+                    <a href="#" class="btn btn-light-grey fileupload-exists" data-dismiss="fileupload">
+                        <i class="icon-remove"></i> Eliminar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-6">
+        <div class="form-group">
+            <label class="control-label">
+                Activo
+            </label>
+            <div>
+                <label class="radio-inline">
+                    <input type="radio" class="grey" value="true" @ViewBag.ActivoSi name="activo" id="ActivoSi">
+                    Sí
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" class="grey" value="false" @ViewBag.ActivoNo name="activo" id="ActivoNo">
+                    No
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+

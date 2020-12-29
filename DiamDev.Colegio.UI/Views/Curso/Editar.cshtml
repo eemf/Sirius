@@ -1,0 +1,158 @@
+﻿@model DiamDev.Colegio.Entities.Curso
+
+@{
+    ViewBag.Title = "Editar Curso";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h2>Editar Curso</h2>
+        <hr>
+        <form action="" role="form" id="formaprincipal" name="formaprincipal" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-12">
+                    @if (ViewData.ModelState.Values.Any(x => x.Errors.Count > 0))
+                    {
+                        <div class="alert alert-danger">
+                            <button class="close" data-dismiss="alert">×</button>
+                            <h4 class="alert-heading">Error</h4>
+                            @Html.ValidationSummary(false)
+                        </div>
+                    }
+                    <input type="hidden" id="CursoId" name="CursoId" value="@Html.Raw(Model.CursoId)" />
+                    <input type="hidden" id="ColegioId" name="ColegioId" value="@Html.Raw(Model.ColegioId)" />
+                </div>
+            </div>
+            @Html.Partial("_CreateOrEdit")
+            <div class="row">
+                <p>
+                    <div class="col-6">
+                        <button data-style="slide-down" class="btn btn-primary btn-block" type="submit">
+                            <span class="ladda-label"> Aceptar </span>
+                            <span class="ladda-spinner"></span>
+                            <span class="ladda-progress" style="width: 0px;"></span>
+                        </button>
+                    </div>
+                </p>
+                <p>
+                    <div class="col-6">
+                        <a class="btn btn-danger btn-block" href="javascript:window.history.back();">
+                            Cancelar <i class="icon-prev"></i>
+                        </a>
+                    </div>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
+<br />
+
+@section Scripts
+{
+    <script src="~/Scripts/mustache.js"></script>
+    <script type="text/html" id="grado_tr_template">
+        <tr>
+            <td>{{grado}}</td>
+            <td>
+                <a href="javascript:void(0)" title="Eliminar" class="btn btn-eliminar"><i class="fas fa-trash"></i></a>
+                <input type="hidden" name="gradoIds" value="{{grado_id}}" />
+                <input type="hidden" name="nombreGradoIds" value="{{grado}}" />
+            </td>
+        </tr>
+    </script>
+
+    <script type="text/javascript">
+
+        var gradoIdSeleccionado = JSON.parse('@Html.Raw(Json.Encode(ViewBag.gradoIds))');
+        var gradoSeleccionado = JSON.parse('@Html.Raw(Json.Encode(ViewBag.nombreGradoIds))');
+
+        $(function ()
+        {
+            $("#NivelId").change(function (evt)
+            {
+                evt.preventDefault();
+
+                var GradoSelect = $("#GradoId");
+                GradoSelect.empty();
+                GradoSelect.append('<option value="">Seleccione un Grado</option>');
+
+                $.ajax({
+                    url: '@Url.Action("ObtenerGradoxNivelAcademico", "Grado")',
+                    data: { 'id': $(this).val() },
+                    traditional: true,
+                    async: false,
+                    type: 'GET',
+                    success: function (data)
+                    {
+                        $.each(data, function (j)
+                        {
+                            GradoSelect.append($("<option></option>").attr("value", data[j]['Value']).text(data[j]['Text']));
+                        });
+                    }
+                });
+            });
+
+            function error(texto)
+            {
+                toastr.error(texto);
+            }
+
+            function cargaGrado(grado_id, grado)
+            {
+                var plantilla = $('#grado_tr_template').html();
+
+                var modelo =
+                {
+                    grado_id: grado_id,
+                    grado: grado
+                };
+
+                var filaHtml = Mustache.render(plantilla, modelo);
+
+                // agregamos la nueva fila a la tabla.
+                $('#grado_tbody').append(filaHtml);
+            }
+
+            renderizarGradosIniciales();
+
+            $('#btn-agregar').click(function (e)
+            {
+                e.preventDefault();
+
+                var grado_id = $('#GradoId').val();
+                var grado = $('#GradoId option:selected').text();
+
+                if (grado_id === "" || grado === "")
+                {
+                    error("Seleccione un grado");
+                    return;
+                }
+
+                cargaGrado(grado_id, grado);
+            });
+
+            $('#grado_tbody').delegate("a", "click", function (e)
+            {
+                e.preventDefault();
+                $(this).parent().parent().remove();
+            });
+
+            function renderizarGradosIniciales()
+            {
+                if (gradoIdSeleccionado == null)
+                {
+                    return;
+                }
+
+                for (var i = 0; i < gradoIdSeleccionado.length; i++)
+                {
+                    var grado_id = gradoIdSeleccionado[i];
+                    var grado = gradoSeleccionado[i];
+
+                    cargaGrado(grado_id, grado);
+                }
+            }
+        });
+    </script>
+}

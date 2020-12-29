@@ -1,0 +1,317 @@
+﻿@model DiamDev.Colegio.Entities.CursoMaestroModel
+
+@{
+    ViewBag.Title = "Actividades x Curso";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h2>Curso</h2>
+        <hr>
+        <form action="" role="form" id="formaprincipal" name="formaprincipal" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-12">
+                    @if (ViewData.ModelState.Values.Any(x => x.Errors.Count > 0))
+                    {
+                        <div class="alert alert-danger">
+                            <button class="close" data-dismiss="alert">×</button>
+                            <h4 class="alert-heading">Error</h4>
+                            @Html.ValidationSummary(false)
+                        </div>
+                    }
+                    <input type="hidden" id="ColegioId" name="ColegioId" value="@Html.Raw(DiamDev.Colegio.UI.App_Start.CustomHelper.getColegioId())" />
+                    <input type="hidden" id="CursoId" name="CursoId" value="@Html.Raw(Model.CursoId)" />
+                    <input type="hidden" id="GradoId" name="GradoId" value="@Html.Raw(Model.GradoId)" />
+                    <input type="hidden" id="SeccionId" name="SeccionId" value="@Html.Raw(Model.SeccionId)" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Curso
+                        </label>
+                        <br />
+                        @(string.IsNullOrWhiteSpace(Model.Curso) ? "No Disponible" : Model.Curso)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Grado
+                        </label>
+                        <br />
+                        @(string.IsNullOrWhiteSpace(Model.Grado) ? "No Disponible" : Model.Grado)
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Sección
+                        </label>
+                        <br />
+                        @(string.IsNullOrWhiteSpace(Model.Seccion) ? "No Disponible" : Model.Seccion)
+                    </div>
+                </div>
+            </div>
+            <h2>Actividades</h2>
+            <hr />           
+            <div class="row">
+                <div class="col-12">
+                    <p style="text-align:right"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#nueva-actividad-form" id="btn-agregar">Agregar</button></p>
+                    @if (Model.Actividades != null && Model.Actividades.Count() > 0)
+                    {
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card card-primary card-tabs">
+                                    <div class="card-header p-0 pt-1">
+                                        <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                                            @foreach (var itemUnidad in Model.Actividades.Select(x => x.Unidad).Distinct())
+                                            {
+                                                <li class="nav-item">
+                                                    <a class="nav-link @(itemUnidad.Equals("Unidad I") ? "active" : "")" id="@string.Format("custom-tabs-{0}-tab",itemUnidad.ToLower().Replace(" ","-"))" data-toggle="pill" href="@string.Format("#custom-tabs-{0}",itemUnidad.ToLower().Replace(" ","-"))" role="tab" aria-controls="@string.Format("custom-tabs-{0}",itemUnidad.ToLower().Replace(" ","-"))" aria-selected="@(itemUnidad.Equals("Unidad I") ? true : false)">@itemUnidad</a>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="tab-content" id="custom-tabs-one-tabContent">
+                                            @foreach (var itemUnidad in Model.Actividades.Select(x => x.Unidad).Distinct())
+                                            {
+                                                <div class="tab-pane fade show @(itemUnidad.Equals("Unidad I") ? "active" : "")" id="@string.Format("custom-tabs-{0}",itemUnidad.ToLower().Replace(" ","-"))" role="tabpanel" aria-labelledby="@string.Format("custom-tabs-{0}-tab",itemUnidad.ToLower().Replace(" ","-"))">
+                                                    <table class="table table-hover table-sm">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Ciclo</th>                                                            
+                                                                <th>Tipo de Actividad</th>
+                                                                <th>Actividad</th>
+                                                                <th>Fecha de Entrega</th>
+                                                                <th>Nota Maxima</th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach (var Actividad in Model.Actividades.Where(x => x.Unidad.Equals(itemUnidad)))
+                                                            {
+                                                                <tr>
+                                                                    <td>@Actividad.Ciclo</td>                                                                
+                                                                    <td>@Actividad.Tipo</td>
+                                                                    <td>@Actividad.Actividad</td>
+                                                                    <td>@Actividad.FechaEntrega.ToString("dd/MM/yyyy")</td>
+                                                                    <td>@Actividad.Nota</td>
+                                                                    <td>
+                                                                        <span class="table-remove">
+                                                                            <a title="Eliminar Actividad" href="@Url.Action("Eliminar_Actividad", "Maestro", new { id = Actividad.ActividadId })" class="btn btn-danger btn-rounded btn-sm my-0"><i class="fas fa-trash"></i></a>
+                                                                        </span>
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                            <tr>
+                                                                <td>
+                                                                    <div style="text-align:left; font-size:large; font-weight:bold;">
+                                                                        Total:
+                                                                    </div>
+                                                                </td>
+                                                                <td colspan="7">
+                                                                    <div style="text-align: right;font-size:large; font-weight:bold;">
+                                                                        @string.Format("{0:F}", Model.Actividades.Where(x => x.Unidad.Equals(itemUnidad)).Sum(x => x.Nota))
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>                                                    
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                     
+                    }
+                </div>
+            </div>
+            <div class="row">
+                <p>
+                    <div class="col-12">
+                        <a class="btn btn-danger btn-block" href="@Url.Action("Curso", "Maestro")">
+                            Regresar <i class="icon-prev"></i>
+                        </a>
+                    </div>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
+<br />
+
+<div class="modal fade" id="nueva-actividad-form" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Nueva Actividad</h4>              
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Unidad
+                            </label>
+                            @Html.DropDownList("UnidadId", (SelectList)ViewBag.Unidades, "Seleccione una Unidad", new { @class = "form-control select2bs4", style = "width: 100%" })
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">
+                                Tipo de Actividad
+                            </label>
+                            @Html.DropDownList("TipoId", (SelectList)ViewBag.Tipos, "Seleccione un Tipo de Actividad", new { @class = "form-control select2bs4", style = "width: 100%" })
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">
+                                Nombre de Actividad
+                            </label>
+                            <input type="text" id="NombreActividad" class="form-control" placeholder="Nombre de Actividad" autocomplete="off" />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">
+                                Descripción
+                            </label>
+                            <textarea id="DescripcionActividad" class="form-control" placeholder="Descripción de Actividad" autocomplete="off"></textarea>
+                        </div>
+                    </div>
+                </div>       
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Nota Maxima de Actividad
+                            </label>
+                            <input type="number" id="NotaActividad" class="form-control" placeholder="Nota Maxima de Actividad" autocomplete="off" />
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Fecha de Entrega
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+                                <input type="text" data-date-format="yyyy-mm-dd" data-date-viewmode="years" class="form-control datepicker" id="FechaActividad" autocomplete="off" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btn-Guardar-Actividad" type="button" class="btn btn-primary btn-block">Guardar</button>
+                <button id="btn-Salir-Actividad" type="button" class="btn btn-danger btn-block" data-dismiss="modal">Salir</button>              
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(function ()
+        {
+            function error(texto)
+            {
+                toastr.error(texto);
+            }
+
+            $("#btn-Guardar-Actividad").click(function (evt)
+            {
+                evt.preventDefault();
+
+                var UnidadId = $("#UnidadId").val();
+                if (UnidadId === "")
+                {
+                    error("La unidad es requerida");
+                    return;
+                }
+
+                var TipoId = $("#TipoId").val();
+                if (TipoId === "")
+                {
+                    error("El tipo de actividad es requerida");
+                    return;
+                }
+
+                var Nombre = $("#NombreActividad").val();
+                if (Nombre === "")
+                {
+                    error("El nombre de la actividad es requerida");
+                    return;
+                }
+
+                var Nota = $("#NotaActividad").val();
+                if (Nota === "")
+                {
+                    error("La nota de la actividad es requerida");
+                    return;
+                }
+
+                var Fecha = $("#FechaActividad").val();
+                if (Fecha === "")
+                {
+                    error("La fecha de la actividad es requerida");
+                    return;
+                }
+
+                var modelo =
+                {
+                    'ColegioId': $("#ColegioId").val(),
+                    'CursoId': $("#CursoId").val(),
+                    'GradoId': $("#GradoId").val(),
+                    'SeccionId': $("#SeccionId").val(),
+                    'UnidadId': UnidadId,
+                    'TipoId': TipoId,
+                    'Nombre': Nombre,
+                    'Descripcion': $("#DescripcionActividad").val(),
+                    'NotaMaxima': Nota,
+                    'FechaEntrega': Fecha
+                };
+
+                $.ajax({
+                    url: '@Url.Action("NuevaActividad", "Maestro")',
+                    data: { 'modelo': modelo },
+                    async: false,
+                    type: 'POST',
+                    success: function (data)
+                    {
+                        if (data.Operacion)
+                        {
+                            toastr.success('La actividad se registro exitosamente');
+
+                            setTimeout(function ()
+                            {
+                                window.location.reload();
+                            }, 1000);                            
+                        }
+                        else
+                        {
+                            toastr.error('La actividad no se registro en el sistema, por favor verificar el total de punteo de las actividades');
+                        }
+                    }
+                });
+
+            });
+
+            $("#btn-Salir-Actividad").on("click", function ()
+            {
+                $("#UnidadId").val("").trigger("change");
+                $("#TipoId").val("").trigger("change");
+
+                $("#NombreActividad").val("");
+                $("#DescripcionActividad").val("");
+                $("#NotaActividad").val("");
+                $("#FechaActividad").val("");
+            });
+        });
+    </script>
+}

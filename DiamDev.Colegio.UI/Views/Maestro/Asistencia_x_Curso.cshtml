@@ -1,0 +1,246 @@
+﻿@model DiamDev.Colegio.Entities.CursoMaestroModel
+
+@{
+    ViewBag.Title = "Asistencia Por Curso";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h2>Asistencia Por Curso</h2>
+        <hr>
+        <form action="" role="form" id="formaprincipal" name="formaprincipal" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-12">
+                    @if (ViewData.ModelState.Values.Any(x => x.Errors.Count > 0))
+                    {
+                        <div class="alert alert-danger">
+                            <button class="close" data-dismiss="alert">×</button>
+                            <h4 class="alert-heading">Error</h4>
+                            @Html.ValidationSummary(false)
+                        </div>
+                    }
+                    <input type="hidden" id="CursoMaestroId" name="CursoMaestroId" value="@Html.Raw(Model.CursoMaestroId)" />
+                    <input type="hidden" id="ColegioId" name="ColegioId" value="@Html.Raw(DiamDev.Colegio.UI.App_Start.CustomHelper.getColegioId())" />
+                    <input type="hidden" id="CursoId" name="CursoId" value="@Html.Raw(Model.CursoId)" />
+                    <input type="hidden" id="GradoId" name="GradoId" value="@Html.Raw(Model.GradoId)" />
+                    <input type="hidden" id="SeccionId" name="SeccionId" value="@Html.Raw(Model.SeccionId)" />
+                    <input type="hidden" id="AlumnoActualId" name="AlumnoActualId" value="0" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Curso
+                        </label>
+                        <br />
+                        @(string.IsNullOrWhiteSpace(Model.Curso) ? "No Disponible" : Model.Curso)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Grado
+                        </label>
+                        <br />
+                        @(string.IsNullOrWhiteSpace(Model.Grado) ? "No Disponible" : Model.Grado)
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Sección
+                        </label>
+                        <br />
+                        @(string.IsNullOrWhiteSpace(Model.Seccion) ? "No Disponible" : Model.Seccion)
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <h2>@string.Format("ASISTENCIA DEL: {0}", DateTime.Today.ToString("dd/MM/yyyy"))</h2>
+            @if (Model != null)
+            {
+                if (Model.Asistencias != null && Model.Asistencias.Count() > 0)
+                {
+                    <table class="table table-hover table-sm">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Alumno(a)
+                                </th>
+                                <th>
+                                </th>
+                                <th>
+                                    ¿Asistió Hoy?
+                                </th>                            
+                                <th>
+                                    Comentario
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var Asistencia in Model.Asistencias)
+                            {
+                                <tr>
+                                    <td>@Asistencia.Alumno</td>
+                                    <td>
+                                        <a class="btn btn-primary" onclick="cargaDiario(@Asistencia.AlumnoId)" href="javascript:void(0);">
+                                            <i class="fas fa-print"></i>
+                                            Diario Pedagógico
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <label class="radio-inline">
+                                                <input type="radio" class="grey" onclick="asistenciaAlumno(@Asistencia.AlumnoId, 0);" value="0" @(Asistencia.Si ? "checked=\"checked\"" : "") name="@Asistencia.AlumnoId">
+                                                Si
+                                            </label>
+                                            <br />
+                                            <label class="radio-inline">
+                                                <input type="radio" class="grey" onclick="asistenciaAlumno(@Asistencia.AlumnoId, 1);" value="1" @(Asistencia.No ? "checked=\"checked\"" : "") name="@Asistencia.AlumnoId">
+                                                No
+                                            </label>
+                                            <br />
+                                            <label class="radio-inline">
+                                                <input type="radio" class="grey" onclick="asistenciaAlumno(@Asistencia.AlumnoId, 2);" value="2" @(Asistencia.Tarde ? "checked=\"checked\"" : "") name="@Asistencia.AlumnoId">
+                                                Tarde
+                                            </label>
+                                        </div>
+                                    </td>                                   
+                                    <td>
+                                        <input type="hidden" name="alumnoId" value="@Asistencia.AlumnoId" />
+                                        <input type="hidden" id="@string.Format("asistencia_{0}", Asistencia.AlumnoId)" name="asistencia" value="@(Asistencia.Si ? 0 : (Asistencia.No ? 1 : (Asistencia.Tarde ? 2 : 0)))" />
+                                        <textarea style="width:100%;" name="comentario" placeholder="Comentario del Día">@(string.IsNullOrWhiteSpace(Asistencia.Comentario) ? "" : Asistencia.Comentario.Trim())</textarea>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            }
+            <div class="row">
+                <p>
+                    <div class="col-6">
+                        <button data-style="slide-down" class="btn btn-primary btn-block" type="submit">
+                            <span class="ladda-label"> Aceptar </span>
+                            <span class="ladda-spinner"></span>
+                            <span class="ladda-progress" style="width: 0px;"></span>
+                        </button>
+                    </div>
+                </p>
+                <p>
+                    <div class="col-6">
+                        <a class="btn btn-danger btn-block" href="@Url.Action("Curso", "Maestro")">
+                            Cancelar <i class="icon-prev"></i>
+                        </a>
+                    </div>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
+<br />
+
+<div class="modal fade" id="diario-form" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Diario Pedagógico</h4>
+            </div>
+            <div class="modal-body">                
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Fecha Inicial
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+                                <input type="text" data-date-format="yyyy-mm-dd" data-date-viewmode="years" class="form-control datepicker" id="fechaInicial" autocomplete="off" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Fecha Final
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+                                <input type="text" data-date-format="yyyy-mm-dd" data-date-viewmode="years" class="form-control datepicker" id="fechaFinal" autocomplete="off" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btn-Generar-Diario" type="button" class="btn btn-primary btn-block">Generar</button>
+                <button id="btn-Salir-Diario" type="button" class="btn btn-danger btn-block" data-dismiss="modal">Salir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+        $(function ()
+        {
+            if ('@TempData["Maestro_Asistencia-Success"]' == "OK")
+            {
+                toastr.success('La asistencia se guardó exitosamente');
+            }
+
+            function error(texto)
+            {
+                toastr.error(texto);
+            }
+
+            $("#btn-Generar-Diario").click(function (evt)
+            {
+                evt.preventDefault();
+
+                var fechaInicial = $("#fechaInicial").val();
+                if (fechaInicial === "")
+                {
+                    error("La fecha inicial es requerida");
+                    return;
+                }
+
+                var fechaFinal = $("#fechaFinal").val();
+                if (fechaFinal === "")
+                {
+                    error("La fecha final es requerida");
+                    return;
+                }
+
+                $("#btn-Salir-Diario").click();
+
+                window.open('@Url.Action("Boleta_x_Asistencia", "Maestro")?id=' + $("#GradoId").val() + '&seccionId=' + $("#SeccionId").val() + '&cursoId=' + $("#CursoId").val() + '&alumnoId=' + $("#AlumnoActualId").val() + '&fechaInicial=' + $("#fechaInicial").val() + '&fechaFinal=' + $("#fechaFinal").val(), '_blank');
+            });
+        });
+
+        function cargaDiario(id)
+        {
+            $("#fechaInicial").val("");
+            $("#fechaFinal").val("");
+
+            $("#AlumnoActualId").val(id);
+
+            $('#diario-form').modal('show');
+        }
+
+        function asistenciaAlumno(id, valor)
+        {
+            $("#asistencia_" + id).val(valor);
+        }
+    </script>
+}

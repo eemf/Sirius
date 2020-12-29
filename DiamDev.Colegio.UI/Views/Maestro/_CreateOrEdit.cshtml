@@ -1,0 +1,128 @@
+﻿@model DiamDev.Colegio.Entities.Maestro
+
+<div class="row">
+    <div class="col-6">
+        <div class="form-group">
+            <label class="control-label">
+                Primer Nombre<span class="symbol required"></span>
+            </label>
+            @Html.TextBoxFor(model => model.PrimerNombre, new { @class = "form-control", @placeholder = "Primer Nombre", required = "required", autocomplete = "off", tabindex = 1})
+        </div>
+        <div class="form-group">
+            <label class="control-label">
+                Primer Apellido<span class="symbol required"></span>
+            </label>
+            @Html.TextBoxFor(model => model.PrimerApellido, new { @class = "form-control", @placeholder = "Primer Apellido", required = "required", autocomplete = "off", tabindex = 3 })
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="form-group">
+            <label class="control-label">
+                Segundo Nombre
+            </label>
+            @Html.TextBoxFor(model => model.SegundoNombre, new { @class = "form-control", @placeholder = "Segundo Nombre", autocomplete = "off", tabindex = 2 })
+        </div>
+        <div class="form-group">
+            <label class="control-label">
+                Segundo Apellido
+            </label>
+            @Html.TextBoxFor(model => model.SegundoApellido, new { @class = "form-control", @placeholder = "Segundo Apellido", autocomplete = "off", tabindex = 4 })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-4">
+        <div class="form-group">
+            <label class="control-label">
+                Fecha de Nacimiento<span class="symbol required"></span>
+            </label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                </div>
+                <input type="text" data-date-format="yyyy-mm-dd" data-date-viewmode="years" class="form-control datepicker" id="FechaNacimiento" name="FechaNacimiento" autocomplete="off" value="@(Model == null ? DateTime.Today.ToString("yyyy-MM-dd") : (Model.FechaNacimiento == null ? "" : Model.FechaNacimiento.ToString("yyyy-MM-dd")))" required tabindex="5" />
+            </div>            
+        </div>        
+    </div>
+    <div class="col-4">
+        <div class="form-group">
+            <label class="control-label">
+                Genero<span class="symbol required"></span>
+            </label>
+            @Html.DropDownList("GeneroId", (SelectList)ViewBag.Generos, "Seleccione un Genero", new { @class = "form-control select2bs4 required", tabindex = 6 })
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="form-group">
+            <label class="control-label">
+                Estado Civil<span class="symbol required"></span>
+            </label>
+            @Html.DropDownList("EstadoCivilId", (SelectList)ViewBag.Estados, "Seleccione un Estado Civil", new { @class = "form-control select2bs4 required", tabindex = 7 })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="form-group">
+            <label class="control-label">
+                Lugar de Nacimiento<span class="symbol required"></span>
+            </label>
+            @Html.TextBoxFor(model => model.LugarNacimiento, new { @class = "form-control", @placeholder = "Lugar de Nacimiento del Maestro(a)", required = "required", autocomplete = "off", tabindex = 8 })
+        </div>
+        <div class="form-group">
+            <label class="control-label">
+                Profesión u Oficio<span class="symbol required"></span>
+            </label>
+            @Html.TextBoxFor(model => model.Profesion, new { @class = "form-control", @placeholder = "Profesion del Maestro(a)", required = "required", autocomplete = "off", tabindex = 9 })
+        </div>
+        <div class="form-group">
+            <label class="control-label">
+                Dirección<span class="symbol required"></span>
+            </label>
+            @Html.TextAreaFor(model => model.Direccion, new { @class = "form-control", @placeholder = "Dirección del Maestro(a)", required = "required", autocomplete = "off", tabindex = 10 })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-6">       
+        <div class="form-group">
+            <label>#Telefono del Maestro(a)</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                </div>
+                @Html.TextBoxFor(model => model.Telefono, new { @class = "form-control input-mask-phone", @placeholder = "#Telefono del Maestro(a)", autocomplete = "off", tabindex = 11 })
+            </div>            
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="form-group">
+            <label class="control-label">
+               Observaciones
+            </label>
+            @Html.TextAreaFor(model => model.Observaciones, new { @class = "form-control", @placeholder = "Observaciones del Maestro(a)", autocomplete = "off", tabindex = 12 })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-6">
+        <div class="form-group">
+            <label class="control-label">
+                Activo
+            </label>
+            <div>
+                <label class="radio-inline">
+                    <input type="radio" class="grey" value="true" @ViewBag.ActivoSi name="activo" id="ActivoSi">
+                    Sí
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" class="grey" value="false" @ViewBag.ActivoNo name="activo" id="ActivoNo">
+                    No
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+

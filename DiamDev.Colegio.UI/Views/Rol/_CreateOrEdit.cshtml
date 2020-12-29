@@ -1,0 +1,79 @@
+﻿@model   DiamDev.Colegio.Entities.Rol
+
+<div class="row">
+    <div class="col-12">
+        <div class="form-group">
+            <label class="control-label">
+                Rol<span class="symbol required"></span>
+            </label>
+            @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @placeholder = "Nombre del Rol", required = "required", autocomplete = "off", autofocus = "autofocus" })
+        </div>        
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <h2>Permisos</h2>
+        <hr>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+      @if (Model != null)
+      {
+          if (Model.PermisoIds != null && Model.PermisoIds.Count() > 0)
+          {
+              foreach (var item in Model.PermisoIds.OrderBy(x => x.Modulo).Select(x => x.Modulo).Distinct())
+              {
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header ui-sortable-handle" style="cursor: move;">
+                                <h3 class="card-title">
+                                    <i class="ion ion-clipboard mr-1"></i>
+                                    @item
+                                </h3>                               
+                            </div>
+                            <div class="card-body">
+                                <ul class="todo-list">
+                                    @foreach (var p in Model.PermisoIds.Where(x => x.Modulo.Equals(item)))
+                                    {
+                                        var activar = false;
+                                        if (Model != null)
+                                        {
+                                            if (Model.Permisos != null && Model.Permisos.Count() > 0)
+                                            {
+                                                foreach (var bd in Model.Permisos)
+                                                {
+                                                    if (p.PermisoId.Equals(bd.PermisoId))
+                                                    {
+                                                        activar = true;
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        <li class="list-group-item">
+                                            <div class="row">
+                                                <div class="col-6">                                                 
+                                                    <div class="icheck-primary d-inline">                                                        
+                                                        <label>
+                                                            <input type="checkbox" name="permisosIds" value="@p.PermisoId" @(activar ? "checked" : "") />
+                                                            @p.Descripcion
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              }
+          }
+      }
+    </div>
+</div>
+
+

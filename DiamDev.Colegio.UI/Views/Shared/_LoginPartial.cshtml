@@ -1,0 +1,20 @@
+﻿@if (Request.IsAuthenticated)
+{
+    <li class="user-footer">
+        <a class="btn btn-default btn-flat btn-block" rel="" href="@Url.Action("ReiniciarPassword", "Seguridad", new { id = DiamDev.Colegio.UI.App_Start.CustomHelper.getUsuarioId() })">
+            <i class="fas fa-user-shield"></i>
+            Cambiar Contraseña
+        </a>
+    </li>
+    <li class="user-footer">
+        <a class="btn btn-default btn-flat btn-block" rel="" href="javascript:document.getElementById('logoutForm').submit()">
+            <i class="fas fa-sign-out-alt"></i>
+            Salir
+        </a>   
+    </li>
+   
+    using (Html.BeginForm("LogOff", "Seguridad", FormMethod.Post, new { id = "logoutForm" })) 
+    {
+            @Html.AntiForgeryToken()            
+    }
+} 

@@ -1,0 +1,163 @@
+﻿@model DiamDev.Colegio.Entities.CursoModel
+
+@{
+    ViewBag.Title = "Cuadro de Asistencia Por Curso y Alumno";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h2>Cuadro de Asistencia Por Curso y Alumno</h2>
+        <hr />
+        <form action="" method="get">
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                            </div>
+                            <input type="hidden" name="seccionId" value="@Html.Raw(Model.SeccionId)" />
+                            <input type="hidden" name="cursoId" value="@Html.Raw(Model.CursoId)" />
+                            <input type="hidden" name="alumnoId" value="@Html.Raw(Model.AlumnoId)" />
+                            <input type="text" data-date-format="yyyy-mm-dd" data-date-viewmode="years" class="form-control datepicker" id="fechaInicial" name="fechaInicial" autocomplete="off" value="@(ViewBag.fechaInicial == null ? DateTime.Today.ToString("yyyy-MM-dd") : ViewBag.fechaInicial)" required />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                            </div>
+                            <input type="text" data-date-format="yyyy-mm-dd" data-date-viewmode="years" class="form-control datepicker" id="fechaFinal" name="fechaFinal" autocomplete="off" value="@(ViewBag.fechaFinal == null ? DateTime.Today.ToString("yyyy-MM-dd") : ViewBag.fechaFinal)" required onchange="this.form.submit();" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <hr />
+        <div class="row">
+            <div class="col-12">
+                <a class="btn btn-primary btn-block" target="_blank" href="@Url.Action("Boleta_x_Asistencia", "Encargado", new { id = Model.GradoId, seccionId = Model.SeccionId, cursoId = Model.CursoId, alumnoId = Model.AlumnoId, fechaInicial = (ViewBag.fechaInicial == null ? DateTime.Today.ToString("yyyy-MM-dd") : ViewBag.fechaInicial), fechaFinal = (ViewBag.fechaFinal == null ? DateTime.Today.ToString("yyyy-MM-dd") : ViewBag.fechaFinal) })">
+                    <i class="fas fa-print"></i>
+                    Diario Pedagógico
+                </a>
+            </div>
+        </div>
+        <hr />
+        <form action="" role="form" id="formaprincipal" name="formaprincipal" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-12">
+                    @if (ViewData.ModelState.Values.Any(x => x.Errors.Count > 0))
+                    {
+                        <div class="alert alert-danger">
+                            <button class="close" data-dismiss="alert">×</button>
+                            <h4 class="alert-heading">Error</h4>
+                            @Html.ValidationSummary(false)
+                        </div>
+                    }
+                    <input type="hidden" id="ColegioId" name="ColegioId" value="@Html.Raw(DiamDev.Colegio.UI.App_Start.CustomHelper.getColegioId())" />
+                    <input type="hidden" id="CursoId" name="CursoId" value="@Html.Raw(Model.CursoId)" />
+                    <input type="hidden" id="GradoId" name="GradoId" value="@Html.Raw(Model.GradoId)" />
+                    <input type="hidden" id="SeccionId" name="SeccionId" value="@Html.Raw(Model.SeccionId)" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Curso
+                        </label>
+                        <br />
+                        @(string.IsNullOrWhiteSpace(Model.Curso) ? "No Disponible" : Model.Curso)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Grado
+                        </label>
+                        <br />
+                        @(string.IsNullOrWhiteSpace(Model.Grado) ? "No Disponible" : Model.Grado)
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Sección
+                        </label>
+                        <br />
+                        @(string.IsNullOrWhiteSpace(Model.Seccion) ? "No Disponible" : Model.Seccion)
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <h2>@string.Format("ASISTENCIA DEL: {0}", (ViewBag.fechaInicial == null && ViewBag.fechaFinal == null ? DateTime.Today.ToString("yyyy-MM-dd") : string.Format("{0} al {1}", ViewBag.fechaInicial, ViewBag.fechaFinal)))</h2>
+            @if (Model != null)
+            {
+                if (Model.Asistencias != null && Model.Asistencias.Count() > 0)
+                {
+                    <table class="table table-hover table-sm">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Alumno(a)
+                                </th>
+                                <th>
+                                    Fecha
+                                </th>
+                                <th>
+                                    ¿Asistió Hoy?
+                                </th>
+                                <th>
+                                    Comentario
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var Asistencia in Model.Asistencias.OrderBy(x => x.FechaAsistencia))
+                            {
+                                <tr>
+                                    <td>
+                                        @Asistencia.Alumno
+                                    </td>
+                                    <td>
+                                        @Asistencia.FechaAsistencia.ToString("dd/MM/yyyy")
+                                    </td>
+                                    <td>
+                                        @(Asistencia.Si ? "Si" : (Asistencia.No ? "No" : "Tarde"))
+                                    </td>
+                                    <td>
+                                        @(string.IsNullOrWhiteSpace(Asistencia.Comentario) ? "" : Asistencia.Comentario)
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <hr />
+                    <div class="row">
+                        <div class="col-12">
+                            <h1 class="text-center">No contiene asistencia</h1>
+                        </div>
+                    </div>
+                }
+            }
+            <div class="row">
+                <p>
+                    <div class="col-12">
+                        <a class="btn btn-danger btn-block" href="@Url.Action("Alumno_x_Curso", "Encargado", new { id = Model.AlumnoId })">
+                            Regresar <i class="icon-prev"></i>
+                        </a>
+                    </div>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
+<br />

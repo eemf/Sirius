@@ -1,0 +1,68 @@
+﻿@model PagedList.IPagedList<DiamDev.Colegio.Entities.CursoMaestroModel>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Cursos Asignados";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Cursos</h3>
+    </div>
+    <div class="card-body table-responsive p-0">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Ciclo</th>
+                    <th>Curso</th>
+                    <th>Grado</th>
+                    <th>Sección</th>
+                    <th>Alumnos</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var Curso in Model)
+                {
+                    <tr>
+                        <td>@Curso.Ciclo</td>
+                        <td>@Curso.Curso</td>
+                        <td>@Curso.Grado</td>
+                        <td>@Curso.Seccion</td>
+                        <td>@Curso.Alumno</td>
+                        <td>
+                            <span class="table-remove">
+                                <a title="Agregar Actividades" href="@Url.Action("Actividad", "Maestro", new { id = Curso.CursoMaestroId })" class="btn btn-primary btn-rounded btn-sm my-0"><i class="fas fa-file-signature"></i></a>
+                                @if (Curso.Actividad > 0)
+                                {
+                                    <a title="Agregar Notas" href="@Url.Action("Nota", "Maestro", new { id = Curso.CursoMaestroId })" class="btn btn-primary btn-rounded btn-sm my-0"><i class="fas fa-file-upload"></i></a>
+                                    <a title="Cuadro de Actividades" href="@Url.Action("Cuadro_x_Curso", "Maestro", new { id = Curso.CursoMaestroId })" class="btn btn-primary btn-rounded btn-sm my-0"><i class="fas fa-file-contract"></i></a>
+                                }
+                                <a title="Asistencia de Curso" href="@Url.Action("Asistencia_x_Curso", "Maestro", new { id = Curso.CursoMaestroId })" class="btn btn-primary btn-rounded btn-sm my-0"><i class="fas fa-book-reader"></i></a>                                
+                            </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card-tools">
+    Pagina @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
+
+    @Html.PagedListPager(Model, page => Url.Action("Curso", new { page, @class = "page-item" }))
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function ()
+        {
+            if ('@TempData["Maestro_Eliminar_Actividad-Success"]' == "OK")
+            {
+                toastr.success('Se elimino exitosamente la actividad');
+            }
+        });
+    </script>
+}

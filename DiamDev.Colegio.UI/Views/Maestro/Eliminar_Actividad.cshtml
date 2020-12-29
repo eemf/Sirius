@@ -1,0 +1,137 @@
+﻿@model DiamDev.Colegio.Entities.Actividad
+
+@{
+    ViewBag.Title = "Eliminar Actividad";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h2>Eliminar Actividad</h2>
+        <hr>
+        <form action="" role="form" id="formaprincipal" name="formaprincipal" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-12">
+                    @if (ViewData.ModelState.Values.Any(x => x.Errors.Count > 0))
+                    {
+                        <div class="alert alert-danger">
+                            <button class="close" data-dismiss="alert">×</button>
+                            <h4 class="alert-heading">Error</h4>
+                            @Html.ValidationSummary(false)
+                        </div>
+                    }
+                    <input type="hidden" id="ActividadId" name="ActividadId" value="@Html.Raw(Model.ActividadId)" />
+                    <input type="hidden" id="ColegioId" name="ColegioId" value="@Html.Raw(Model.ColegioId)" />
+                    <input type="hidden" id="CursoId" name="CursoId" value="@Html.Raw(Model.CursoId)" />
+                    <input type="hidden" id="GradoId" name="GradoId" value="@Html.Raw(Model.GradoId)" />
+                    <input type="hidden" id="SeccionId" name="SeccionId" value="@Html.Raw(Model.SeccionId)" />
+                    <input type="hidden" id="CicloId" name="CicloId" value="@Html.Raw(Model.CicloId)" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Curso
+                        </label>
+                        <br />
+                        @(Model.Curso == null ? "No Disponible" : Model.Curso.Nombre)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Grado
+                        </label>
+                        <br />
+                        @(Model.Grado == null ? "No Disponible" : Model.Grado.Nombre)
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Sección
+                        </label>
+                        <br />
+                        @(Model.Seccion == null ? "No Disponible" : Model.Seccion.Nombre)
+                    </div>
+                </div>
+            </div>
+            <h2>Actividad</h2>
+            <hr />
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Ciclo
+                        </label>
+                        <br />
+                        @(Model.Ciclo == null ? "No Disponible" : Model.Ciclo.Nombre)
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">
+                            Unidad
+                        </label>
+                        <br />
+                        @(Model.Unidad == null ? "No Disponible" : Model.Unidad.Nombre)
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">
+                            Tipo de Actividad
+                        </label>
+                        <br />
+                        @(Model.Tipo == null ? "No Disponible" : Model.Tipo.Nombre)
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">
+                            Actividad
+                        </label>
+                        <br />
+                        @Model.Nombre
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Nota Maxima
+                        </label>
+                        <br />
+                        @Model.NotaMaxima
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Fecha de Entrega
+                        </label>
+                        <br />
+                        @Model.FechaEntrega.ToString("dd/MM/yyyy")
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <p>
+                    <div class="col-6">
+                        <button data-style="slide-down" class="btn btn-primary btn-block" type="submit">
+                            <span class="ladda-label"> Aceptar </span>
+                            <span class="ladda-spinner"></span>
+                            <span class="ladda-progress" style="width: 0px;"></span>
+                        </button>
+                    </div>
+                </p>
+                <p>
+                    <div class="col-6">
+                        <a class="btn btn-danger btn-block" href="javascript:window.history.back();">
+                            Cancelar <i class="icon-prev"></i>
+                        </a>
+                    </div>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
+<br />

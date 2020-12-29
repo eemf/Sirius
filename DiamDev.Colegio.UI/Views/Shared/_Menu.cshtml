@@ -1,0 +1,25 @@
+﻿@model IEnumerable<DiamDev.Colegio.Entities.Menu>
+
+@if (Model != null && Model.Count() > 0)
+{
+    foreach (var Item in Model)
+    {
+        <li class="nav-item">
+            <a href="javascript:void(0)" class="nav-link">
+                <i class="@(Item.IconName)"></i>
+                <p>
+                    @(Item.Titulo)
+                    <i class="right fas fa-angle-left"></i>
+                </p>               
+            </a>
+
+            @if (Item.Items != null)
+            {
+                <ul class="nav nav-treeview">
+                    @Html.Partial("_SubMenu", Item.Items)
+                </ul>
+            }
+            
+	    </li>
+    }
+}

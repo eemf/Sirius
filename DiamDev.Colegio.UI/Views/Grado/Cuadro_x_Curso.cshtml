@@ -1,0 +1,144 @@
+﻿@model DiamDev.Colegio.Entities.CursoModel
+
+@{
+    ViewBag.Title = "Cuadro De Actividades Por Curso";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h2>Cuadro De Actividades Por Curso</h2>
+        <hr>
+        <form action="" role="form" id="formaprincipal" name="formaprincipal" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-12">
+                    @if (ViewData.ModelState.Values.Any(x => x.Errors.Count > 0))
+                    {
+                        <div class="alert alert-danger">
+                            <button class="close" data-dismiss="alert">×</button>
+                            <h4 class="alert-heading">Error</h4>
+                            @Html.ValidationSummary(false)
+                        </div>
+                    }
+                    <input type="hidden" id="ColegioId" name="ColegioId" value="@Html.Raw(DiamDev.Colegio.UI.App_Start.CustomHelper.getColegioId())" />
+                    <input type="hidden" id="CursoId" name="CursoId" value="@Html.Raw(Model.CursoId)" />
+                    <input type="hidden" id="GradoId" name="GradoId" value="@Html.Raw(Model.GradoId)" />
+                    <input type="hidden" id="SeccionId" name="SeccionId" value="@Html.Raw(Model.SeccionId)" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Curso
+                        </label>
+                        <br />
+                        @(string.IsNullOrWhiteSpace(Model.Curso) ? "No Disponible" : Model.Curso)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Grado
+                        </label>
+                        <br />
+                        @(string.IsNullOrWhiteSpace(Model.Grado) ? "No Disponible" : Model.Grado)
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Sección
+                        </label>
+                        <br />
+                        @(string.IsNullOrWhiteSpace(Model.Seccion) ? "No Disponible" : Model.Seccion)
+                    </div>
+                </div>
+            </div>
+            <hr />
+            @if (Model.Cuadros != null && Model.Cuadros.Count() > 0)
+            {
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card card-primary card-tabs">
+                            <div class="card-header p-0 pt-1">
+                                <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                                    @foreach (var itemUnidad in Model.Cuadros.Select(x => x.Unidad).Distinct())
+                                    {
+                                        <li class="nav-item">
+                                            <a class="nav-link @(itemUnidad.Equals("Unidad I") ? "active" : "")" id="@string.Format("custom-tabs-{0}-tab",itemUnidad.ToLower().Replace(" ","-"))" data-toggle="pill" href="@string.Format("#custom-tabs-{0}",itemUnidad.ToLower().Replace(" ","-"))" role="tab" aria-controls="@string.Format("custom-tabs-{0}",itemUnidad.ToLower().Replace(" ","-"))" aria-selected="@(itemUnidad.Equals("Unidad I") ? true : false)">@itemUnidad</a>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                            <div class="card-body">
+                                <div class="tab-content" id="custom-tabs-one-tabContent">
+                                    @foreach (var itemUnidad in Model.Cuadros.Select(x => x.Unidad).Distinct())
+                                    {
+                                        <div class="tab-pane fade show @(itemUnidad.Equals("Unidad I") ? "active" : "")" id="@string.Format("custom-tabs-{0}",itemUnidad.ToLower().Replace(" ","-"))" role="tabpanel" aria-labelledby="@string.Format("custom-tabs-{0}-tab",itemUnidad.ToLower().Replace(" ","-"))">
+                                            <table class="table table-hover table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th>
+                                                            Alumno(a)
+                                                        </th>
+                                                        @foreach (var itemActividad in Model.Cuadros.Where(x => x.Unidad.Equals(itemUnidad)).Select(x => x.Actividad).Distinct())
+                                                        {
+                                                            <th>@itemActividad</th>
+                                                        }
+                                                        <th>
+                                                            Total
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var itemAlumno in Model.Cuadros.Where(x => x.Unidad.Equals(itemUnidad)).Select(x => x.Alumno).Distinct())
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                @itemAlumno
+                                                            </td>
+                                                            @foreach (var itemNota in Model.Cuadros.Where(x => x.Unidad.Equals(itemUnidad) && x.Alumno.Equals(itemAlumno)))
+                                                            {
+                                                                <td>
+                                                                    @string.Format("{0:F}/{1:F}", itemNota.Nota, itemNota.NotaActividad)
+                                                                </td>
+                                                            }
+                                                            <td>
+                                                                @string.Format("{0:F}/{1:F}", Model.Cuadros.Where(x => x.Unidad.Equals(itemUnidad) && x.Alumno.Equals(itemAlumno)).Sum(x => x.Nota), Model.Cuadros.Where(x => x.Unidad.Equals(itemUnidad) && x.Alumno.Equals(itemAlumno)).Sum(x => x.NotaActividad))
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="row">
+                    <div class="col-12">
+                        <h1 class="text-center">No contiene actividades</h1>
+                    </div>
+                </div>
+            }
+            <div class="row">
+                <p>
+                    <div class="col-12">
+                        <a class="btn btn-danger btn-block" href="javascript:window.history.back();">
+                            Regresar <i class="icon-prev"></i>
+                        </a>
+                    </div>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
+<br />

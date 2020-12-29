@@ -1,0 +1,339 @@
+﻿@model DiamDev.Colegio.Entities.Maestro
+
+@{
+    ViewBag.Title = "Asignar Curso";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h2>Asignar Curso</h2>
+        <hr>
+        <form action="" role="form" id="formaprincipal" name="formaprincipal" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-12">
+                    @if (ViewData.ModelState.Values.Any(x => x.Errors.Count > 0))
+                    {
+                        <div class="alert alert-danger">
+                            <button class="close" data-dismiss="alert">×</button>
+                            <h4 class="alert-heading">Error</h4>
+                            @Html.ValidationSummary(false)
+                        </div>
+                    }
+                    <input type="hidden" id="MaestroId" name="MaestroId" value="@Html.Raw(Model.MaestroId)" />
+                    <input type="hidden" id="ColegioId" name="ColegioId" value="@Html.Raw(Model.ColegioId)" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Primer Nombre
+                        </label>
+                        <br />
+                        @(string.IsNullOrWhiteSpace(Model.PrimerNombre) ? "No Disponible" : Model.PrimerNombre)
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">
+                            Primer Apellido
+                        </label>
+                        <br />
+                        @(string.IsNullOrWhiteSpace(Model.PrimerApellido) ? "No Disponible" : Model.PrimerApellido)
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Segundo Nombre
+                        </label>
+                        <br />
+                        @(string.IsNullOrWhiteSpace(Model.SegundoNombre) ? "No Disponible" : Model.SegundoNombre)
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">
+                            Segundo Apellido
+                        </label>
+                        <br />
+                        @(string.IsNullOrWhiteSpace(Model.SegundoApellido) ? "No Disponible" : Model.SegundoApellido)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Fecha de Nacimiento
+                        </label>
+                        <br />
+                        @Model.FechaNacimiento.ToString("yyyy-MM-dd")
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Genero
+                        </label>
+                        <br />
+                        @(Model.Genero == null ? "No Disponible" : Model.Genero.Nombre)
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Estado Civil
+                        </label>
+                        <br />
+                        @(Model.EstadoCivil == null ? "No Disponible" : Model.EstadoCivil.Nombre)
+                    </div>
+                </div>
+            </div>
+            <h2>Cursos</h2>
+            <hr />
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Nivel Academico
+                        </label>
+                        @Html.DropDownList("NivelId", (SelectList)ViewBag.Niveles, "Seleccione un Nivel Academico", new { @class = "form-control select2bs4" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Grado
+                        </label>
+                        <select id="GradoId" name="GradoId" class="form-control select2bs4">
+                            <option value="">Seleccione un Grado</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Sección
+                        </label>
+                        @Html.DropDownList("SeccionId", (SelectList)ViewBag.Secciones, "Seleccione una Sección", new { @class = "form-control select2bs4" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Curso
+                        </label>
+                        <select id="CursoId" name="CursoId" class="form-control select2bs4">
+                            <option value="">Seleccione un Curso</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <p style="text-align:right"><button type="button" class="btn btn-primary" id="btn-agregar">Agregar</button></p>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Grado</th>
+                                <th>Sección</th>
+                                <th>Curso</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="curso_tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <p>
+                    <div class="col-6">
+                        <button data-style="slide-down" class="btn btn-primary btn-block" type="submit">
+                            <span class="ladda-label"> Aceptar </span>
+                            <span class="ladda-spinner"></span>
+                            <span class="ladda-progress" style="width: 0px;"></span>
+                        </button>
+                    </div>
+                </p>
+                <p>
+                    <div class="col-6">
+                        <a class="btn btn-danger btn-block" href="javascript:window.history.back();">
+                            Cancelar <i class="icon-prev"></i>
+                        </a>
+                    </div>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
+<br />
+
+@section Scripts
+{
+    <script src="~/Scripts/mustache.js"></script>
+    <script type="text/html" id="curso_tr_template">
+        <tr>
+            <td>{{grado}}</td>
+            <td>{{seccion}}</td>
+            <td>{{curso}}</td>
+            <td>
+                <a href="javascript:void(0)" title="Eliminar" class="btn btn-eliminar"><i class="fas fa-trash"></i></a>
+                <input type="hidden" name="gradoIds" value="{{grado_id}}" />
+                <input type="hidden" name="nombreGradoIds" value="{{grado}}" />
+                <input type="hidden" name="seccionIds" value="{{seccion_id}}" />
+                <input type="hidden" name="nombreSeccionIds" value="{{seccion}}" />
+                <input type="hidden" name="cursoIds" value="{{curso_id}}" />
+                <input type="hidden" name="nombreCursoIds" value="{{curso}}" />
+            </td>
+        </tr>
+    </script>
+
+    <script type="text/javascript">
+
+        var gradoIdSeleccionado = JSON.parse('@Html.Raw(Json.Encode(ViewBag.gradoIds))');
+        var gradoSeleccionado = JSON.parse('@Html.Raw(Json.Encode(ViewBag.nombreGradoIds))');
+        var seccionIdSeleccionado = JSON.parse('@Html.Raw(Json.Encode(ViewBag.seccionIds))');
+        var seccionSeleccionado = JSON.parse('@Html.Raw(Json.Encode(ViewBag.nombreSeccionIds))');
+        var cursoIdSeleccionado = JSON.parse('@Html.Raw(Json.Encode(ViewBag.cursoIds))');
+        var cursoSeleccionado = JSON.parse('@Html.Raw(Json.Encode(ViewBag.nombreCursoIds))');
+
+        $(function ()
+        {
+            $("#NivelId").change(function (evt)
+            {
+                evt.preventDefault();
+
+                var GradoSelect = $("#GradoId");
+                GradoSelect.empty();
+                GradoSelect.append('<option value="">Seleccione un Grado</option>');
+
+                $.ajax({
+                    url: '@Url.Action("ObtenerGradoxNivelAcademico", "Grado")',
+                    data: { 'id': $(this).val() },
+                    traditional: true,
+                    async: false,
+                    type: 'GET',
+                    success: function (data)
+                    {
+                        $.each(data, function (j)
+                        {
+                            GradoSelect.append($("<option></option>").attr("value", data[j]['Value']).text(data[j]['Text']));
+                        });
+                    }
+                });
+            });
+
+            $("#GradoId").change(function (evt)
+            {
+                evt.preventDefault();
+
+                var CursoSelect = $("#CursoId");
+                CursoSelect.empty();
+                CursoSelect.append('<option value="">Seleccione un Curso</option>');
+
+                $.ajax({
+                    url: '@Url.Action("ObtenerCursoxGrado", "Curso")',
+                    data: { 'id': $(this).val() },
+                    traditional: true,
+                    async: false,
+                    type: 'GET',
+                    success: function (data)
+                    {
+                        $.each(data, function (j)
+                        {
+                            CursoSelect.append($("<option></option>").attr("value", data[j]['Value']).text(data[j]['Text']));
+                        });
+                    }
+                });
+            });
+
+            function error(texto)
+            {
+                toastr.error(texto);
+            }
+
+            function cargaCurso(grado_id, grado, seccion_id, seccion, curso_id, curso)
+            {
+                var plantilla = $('#curso_tr_template').html();
+
+                var modelo =
+                {
+                    grado_id: grado_id,
+                    grado: grado,
+                    seccion_id: seccion_id,
+                    seccion: seccion,
+                    curso_id: curso_id,
+                    curso: curso
+                };
+
+                var filaHtml = Mustache.render(plantilla, modelo);
+
+                // agregamos la nueva fila a la tabla.
+                $('#curso_tbody').append(filaHtml);
+            }
+
+            renderizarCursosIniciales();
+
+            $('#btn-agregar').click(function (e)
+            {
+                e.preventDefault();
+
+                var grado_id = $('#GradoId').val();
+                var grado = $('#GradoId option:selected').text();
+
+                if (grado_id === "" || grado === "") {
+                    error("Seleccione un grado");
+                    return;
+                }
+
+                var seccion_id = $('#SeccionId').val();
+                var seccion = $('#SeccionId option:selected').text();
+
+                if (seccion_id === "" || seccion === "")
+                {
+                    error("Seleccione una sección");
+                    return;
+                }
+
+                var curso_id = $('#CursoId').val();
+                var curso = $('#CursoId option:selected').text();
+
+                if (curso_id === "" || curso === "")
+                {
+                    error("Seleccione un curso");
+                    return;
+                }
+
+                cargaCurso(grado_id, grado, seccion_id, seccion, curso_id, curso);
+            });
+
+            $('#curso_tbody').delegate("a", "click", function (e)
+            {
+                e.preventDefault();
+                $(this).parent().parent().remove();
+            });
+
+            function renderizarCursosIniciales()
+            {
+                if (gradoIdSeleccionado == null)
+                {
+                    return;
+                }
+
+                for (var i = 0; i < gradoIdSeleccionado.length; i++)
+                {
+                    var grado_id = gradoIdSeleccionado[i];
+                    var grado = gradoSeleccionado[i];
+                    var seccion_id = seccionIdSeleccionado[i];
+                    var seccion = seccionSeleccionado[i];
+                    var curso_id = cursoIdSeleccionado[i];
+                    var curso = cursoSeleccionado[i];
+
+                    cargaCurso(grado_id, grado, seccion_id, seccion, curso_id, curso);
+                }
+            }
+        });
+    </script>
+}

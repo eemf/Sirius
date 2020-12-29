@@ -1,0 +1,108 @@
+﻿@model DiamDev.Colegio.Entities.AlumnoxResponsable
+
+@{
+    ViewBag.Title = "Alumno Por Curso";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h2>Alumno Por Curso</h2>
+        <hr>
+        <form action="" role="form" id="formaprincipal" name="formaprincipal" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-12">
+                    @if (ViewData.ModelState.Values.Any(x => x.Errors.Count > 0))
+                    {
+                        <div class="alert alert-danger">
+                            <button class="close" data-dismiss="alert">×</button>
+                            <h4 class="alert-heading">Error</h4>
+                            @Html.ValidationSummary(false)
+                        </div>
+                    }
+                    <input type="hidden" id="ColegioId" name="ColegioId" value="@Html.Raw(DiamDev.Colegio.UI.App_Start.CustomHelper.getColegioId())" />
+                    <input type="hidden" id="GradoId" name="GradoId" value="@Html.Raw(Model.GradoId)" />
+                    <input type="hidden" id="SeccionId" name="SeccionId" value="@Html.Raw(Model.SeccionId)" />
+                    <input type="hidden" id="AlumnoId" name="AlumnoId" value="@Html.Raw(Model.AlumnoId)" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Alumno(a)
+                        </label>
+                        <br />
+                        @(string.IsNullOrWhiteSpace(Model.Alumno) ? "No Disponible" : Model.Alumno)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Grado
+                        </label>
+                        <br />
+                        @(string.IsNullOrWhiteSpace(Model.Grado) ? "No Disponible" : Model.Grado)
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Sección
+                        </label>
+                        <br />
+                        @(string.IsNullOrWhiteSpace(Model.Seccion) ? "No Disponible" : Model.Seccion)
+                    </div>
+                </div>
+            </div>
+            <hr />
+            @if (Model.Cursos != null && Model.Cursos.Count() > 0)
+            {
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Ciclo</th>
+                            <th>Curso</th>                          
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var Curso in Model.Cursos)
+                        {
+                            <tr>
+                                <td>@Curso.Ciclo</td>
+                                <td>@Curso.Curso</td>                                                          
+                                <td>
+                                    <span class="table-remove">
+                                        <a title="Cuadro de Asistencias" href="@Url.Action("Cuadro_x_Asistencia", "Encargado", new { id = Curso.GradoId, seccionId = Curso.SeccionId, cursoId = Curso.CursoId, alumnoId = Model.AlumnoId, fechaInicial = DateTime.Today.ToString("yyyy-MM-dd"), fechaFinal = DateTime.Today.ToString("yyyy-MM-dd") })" class="btn btn-primary btn-rounded btn-sm my-0"><i class="fas fa-book-reader"></i></a>
+                                        <a title="Cuadro de Actividades" href="@Url.Action("Cuadro_x_Curso", "Encargado", new { id = Curso.GradoId, seccionId = Curso.SeccionId, cursoId = Curso.CursoId, alumnoId = Model.AlumnoId })" class="btn btn-primary btn-rounded btn-sm my-0"><i class="fas fa-file-contract"></i></a>
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="row">
+                    <div class="col-12">
+                        <h1 class="text-center">No contiene cursos</h1>
+                    </div>
+                </div>
+            }
+            <div class="row">
+                <p>
+                    <div class="col-12">
+                        <a class="btn btn-danger btn-block" href="@Url.Action("Alumno", "Encargado")">
+                            Regresar <i class="icon-prev"></i>
+                        </a>
+                    </div>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
+<br />

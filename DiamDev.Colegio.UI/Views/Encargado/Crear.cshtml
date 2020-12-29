@@ -1,0 +1,291 @@
+﻿@model DiamDev.Colegio.Entities.Encargado
+
+@{
+    ViewBag.Title = "Nuevo Encargado(a)";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h2>Nuevo Encargado(a)</h2>
+        <hr>
+        <form action="" role="form" id="formaprincipal" name="formaprincipal" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-12">
+                    @if (ViewData.ModelState.Values.Any(x => x.Errors.Count > 0))
+                    {
+                        <div class="alert alert-danger">
+                            <button class="close" data-dismiss="alert">×</button>
+                            <h4 class="alert-heading">Error</h4>
+                            @Html.ValidationSummary(false)
+                        </div>
+                    }
+                </div>
+            </div>
+            @Html.Partial("_CreateOrEdit")
+            <div class="row">
+                <p>
+                    <div class="col-6">
+                        <button data-style="slide-down" class="btn btn-primary btn-block" type="submit">
+                            <span class="ladda-label"> Aceptar </span>
+                            <span class="ladda-spinner"></span>
+                            <span class="ladda-progress" style="width: 0px;"></span>
+                        </button>
+                    </div>
+                </p>
+                <p>
+                    <div class="col-6">
+                        <a class="btn btn-danger btn-block" href="javascript:window.history.back();">
+                            Cancelar <i class="icon-prev"></i>
+                        </a>
+                    </div>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
+<br />
+
+<div id="seleccionar-alumno-form" class="modal fade" data-width="500" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Seleccionar Alumno(a)</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="alumno_seleccionado_tbody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btn-close-up-seleccionar-alumno" type="button" class="btn btn-danger btn-block" data-dismiss="modal">Salir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/Scripts/mustache.js"></script>
+    <script type="text/html" id="alumno_tr_template">
+        <tr>
+            <td>{{alumno}}</td>
+            <td>
+                <a href="javascript:void(0)" title="Eliminar" class="btn btn-eliminar"><i class="fas fa-trash"></i></a>
+                <input type="hidden" name="alumnoIds" value="{{alumno_id}}" />
+                <input type="hidden" name="nombreAlumnoIds" value="{{alumno}}" />
+            </td>
+        </tr>
+    </script>
+
+    <script type="text/javascript">
+
+        var vAlumno = "";
+
+        var alumnoIdSeleccionados = JSON.parse('@Html.Raw(Json.Encode(ViewBag.alumnoIds))');
+        var alumnoSeleccionados = JSON.parse('@Html.Raw(Json.Encode(ViewBag.nombreAlumnoIds))');       
+
+        $(document).ready(function ()
+        {
+            function error(texto)
+            {
+                toastr.error(texto);
+            }
+
+            $("#BuscarAlumno").autocomplete({
+                source: function (request, response)
+                {
+                    $.ajax({
+                        url: '@Url.Action("ConsultaAlumnoAutocomplementar", "Alumno")',
+                        type: "POST",
+                        dataType: "json",
+                        data: { search: request.term },
+                        success: function (data)
+                        {
+                            response($.map(data, function (item)
+                            {
+                                return { label: item.Nombre, value: item.Nombre };
+                            }))
+                        }
+                    })
+                },
+                messages:
+                {
+                    noResults: "", results: ""
+                }
+            });
+
+            $('#formaprincipal').keydown(function (evt)
+            {
+                if ($('#BuscarAlumno').is(":focus") && (evt.which || evt.keyCode) == 13)
+                {
+                    cargaBusquedaAlumno(evt)
+                }
+            });
+
+            $('#btnBuscarAlumno').click(function (evt)
+            {
+                cargaBusquedaAlumno(evt);
+            });
+
+            $('#alumno_seleccionado_tbody').delegate("a", "click", function (e)
+            {
+                e.preventDefault();
+
+                $('#btn-close-up-seleccionar-alumno').click();
+                var alumnoReferencia = $(this).attr("href");
+                var alumnoActual = alumnoReferencia.split(";");
+
+                var modelo =
+                {
+                    'AlumnoId': alumnoActual[0],
+                    'Nombre': alumnoActual[1]
+                };
+
+                cargaAlumnoSeleccionado(modelo);
+            });
+
+            function cargaBusquedaAlumno(evt)
+            {
+                evt.preventDefault();
+
+                if ($('#BuscarAlumno').val() === "")
+                {
+                    error("Ingresar el nombre del alumno(a)");
+                    $('#BuscarAlumno').focus();
+                    return;
+                }             
+
+                var alumnoActual = $('#BuscarAlumno').val();
+                alumnoActual = alumnoActual.replace(" ", "_");
+
+                $.ajax({
+                    url: '@Url.Action("ObtenerAlumnoxTextoLibre", "Alumno")',
+                    traditional: true,
+                    data: { 'search': alumnoActual },
+                    async: false,
+                    type: 'GET',
+                    success: function (resultData)
+                    {
+                        if (resultData !== null)
+                        {
+                            if (resultData.Operacion)
+                            {
+                                if (resultData.Data.length === 1)
+                                {
+                                    cargaAlumnoSeleccionado(resultData.Data[0]);
+                                }
+                                else if (resultData.Data.length > 1)
+                                {
+                                    var fila = "";
+                                    for (var i = 0; i < resultData.Data.length; i++)
+                                    {
+                                        fila += "<tr><td>" + resultData.Data[i].AlumnoId + "</td>";
+                                        fila += "<td>" + resultData.Data[i].Nombre + "</td>";
+                                        fila += "<td><a href='" + resultData.Data[i].AlumnoId + ";" + resultData.Data[i].Nombre + "' title='Seleccionar' class='btn btn-seleccionar'><i class='fas fa-check'></i></a></td></tr>";
+                                    }
+
+                                    $('#seleccionar-alumno-form').modal('show');
+                                    $("#seleccionar-alumno-form").find("#alumno_seleccionado_tbody").html(fila);
+                                }
+                            }
+                            else
+                            {
+                                toastr.error('El nombre del alumno(a) ingresado no es correcto');
+                                $('#BuscarAlumno').val("");
+                                $('#BuscarAlumno').focus();
+                            }
+                        }
+                        else
+                        {
+                            toastr.error('El nombre del alumno(a) ingresado no es correcto');
+                            $('#BuscarAlumno').val("");
+                            $('#BuscarAlumno').focus();
+                        }
+                    }
+                });
+            }
+
+            function cargaAlumnoSeleccionado(alumno)
+            {
+                $('#NombreAlumno').val(alumno.Nombre);
+                $('#AlumnoId').val(alumno.AlumnoId);               
+
+                $('#BuscarAlumno').focus();
+                vAlumno = $('#BuscarAlumno').val();
+            }
+
+            function cargaAlumno(alumno_id, alumno)
+            {
+                var plantilla = $('#alumno_tr_template').html();
+
+                var modelo =
+                {
+                    alumno_id: alumno_id,
+                    alumno: alumno
+                };
+
+                var filaHtml = Mustache.render(plantilla, modelo);
+
+                // agregamos la nueva fila a la tabla.
+                $('#alumno_tbody').append(filaHtml);
+            }
+
+            renderizarAlumnosIniciales();
+
+            $('#btn-agregar').click(function (e)
+            {
+                e.preventDefault();
+
+                var alumno_id = $('#AlumnoId').val();
+                var alumno = $('#NombreAlumno').val();
+
+                if (alumno_id === "" || alumno === "")
+                {
+                    error("Seleccione un alumno(a)");
+                    return;
+                }              
+
+                cargaAlumno(alumno_id, alumno);             
+                
+                $("#NombreAlumno").val("");
+                $("#AlumnoId").val(0);
+                $("#BuscarAlumno").val("");
+                $("#BuscarAlumno").focus();
+            });
+
+            $('#alumno_tbody').delegate("a", "click", function (e)
+            {
+                e.preventDefault();
+                $(this).parent().parent().remove();
+            });
+
+            function renderizarAlumnosIniciales()
+            {
+                if (alumnoIdSeleccionados == null)
+                {
+                    return;
+                }
+
+                // recorremos los alumno(a)s que haya ingresado el usuario
+                for (var i = 0; i < alumnoIdSeleccionados.length; i++)
+                {
+                    var alumno_id = alumnoIdSeleccionados[i];
+                    var alumno = alumnoSeleccionados[i];                   
+
+                    cargaAlumno(alumno_id, alumno);
+                }
+            }
+        });
+    </script>
+}
