@@ -43,5 +43,11 @@ namespace DiamDev.Colegio.Entities
         public int Correlativo { get; set; }
 
         public List<CursoGrado> Grados { get; set; }
+
+        [NotMapped]
+        public int Nota { get; set; }
+
+        [NotMapped]
+        public long ResponsableId { get; set; }
     }
 }

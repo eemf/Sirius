@@ -79,6 +79,7 @@ namespace DiamDev.Colegio.UI.Controllers
                 reporte.DataSources.Add(new ReportDataSource("EncabezadoAlumno", reportDataSource.Tables[1]));
                 reporte.DataSources.Add(new ReportDataSource("Notas", reportDataSource.Tables[2]));
                 reporte.DataSources.Add(new ReportDataSource("Asistencia", reportDataSource.Tables[3]));
+                reporte.DataSources.Add(new ReportDataSource("Notas_Actitudinal", reportDataSource.Tables[4]));
 
                 string deviceInfo =
                     "<DeviceInfo>" +
@@ -387,6 +388,7 @@ namespace DiamDev.Colegio.UI.Controllers
                 DataTable EncabezadoAlumno = new DataTable("EncabezadoAlumno");
                 DataTable DetalleNotas = new DataTable("Notas");
                 DataTable Asistencia = new DataTable("Asistencia");
+                DataTable DetalleActitudinalNotas = new DataTable("Notas_Actitudinal");
 
                 //Encabezado del colegio
                 EncabezadoColegio.Columns.Add(new DataColumn("ColegioId", typeof(string)));
@@ -433,7 +435,16 @@ namespace DiamDev.Colegio.UI.Controllers
                 Asistencia.Columns.Add(new DataColumn("AlumnoId", typeof(string)));
                 Asistencia.Columns.Add(new DataColumn("Si", typeof(int)));
                 Asistencia.Columns.Add(new DataColumn("No", typeof(int)));
-                Asistencia.Columns.Add(new DataColumn("Tarde", typeof(int)));                
+                Asistencia.Columns.Add(new DataColumn("Tarde", typeof(int)));
+
+                //Notas Actitudinal
+                DetalleActitudinalNotas.Columns.Add(new DataColumn("AlumnoId", typeof(string)));
+                DetalleActitudinalNotas.Columns.Add(new DataColumn("Curso", typeof(string)));
+                DetalleActitudinalNotas.Columns.Add(new DataColumn("Unidad1", typeof(decimal)));
+                DetalleActitudinalNotas.Columns.Add(new DataColumn("Unidad2", typeof(decimal)));
+                DetalleActitudinalNotas.Columns.Add(new DataColumn("Unidad3", typeof(decimal)));
+                DetalleActitudinalNotas.Columns.Add(new DataColumn("Unidad4", typeof(decimal)));
+                DetalleActitudinalNotas.Columns.Add(new DataColumn("Total", typeof(decimal)));
 
                 //Se cargan el alumno
                 AlumnoModel AlumnoActual = new AlumnoBL().ObtenerxId(ColegioActualId, alumnoId);
@@ -447,11 +458,13 @@ namespace DiamDev.Colegio.UI.Controllers
                 List<NotaModel> TNotas = new GradoBL().ObtenerNotasxAlumno(id, seccionId, ColegioActualId, alumnoId);
                 if (TNotas != null && TNotas.Count() > 0)
                 {
-                    List<long> UnidadIds = new List<long>() { 20201108001, 20201108002, 20201108003, 20201108004 };                    
-                    List<string> CursoIds = TNotas.OrderBy(x => x.Curso).Select(x => x.Curso).Distinct().ToList();
+                    List<long> UnidadIds = new List<long>() { 20201108001, 20201108002, 20201108003, 20201108004 };
+                    List<string> CursoNormalesIds = TNotas.Where(x => x.Actitudinal == 0).OrderBy(x => x.Curso).Select(x => x.Curso).Distinct().ToList();
+                    List<string> CursoActitudinalIds = TNotas.Where(x => x.Actitudinal == 1).OrderBy(x => x.Curso).Select(x => x.Curso).Distinct().ToList();
 
+                    //Cursos Normales
                     int Correlativo = 1;
-                    foreach (string CursoActual in CursoIds)
+                    foreach (string CursoActual in CursoNormalesIds)
                     {
                         decimal NotaUnidad1 = 0;
                         decimal NotaUnidad2 = 0;
@@ -502,7 +515,7 @@ namespace DiamDev.Colegio.UI.Controllers
                             }
                         }
 
-                        TPromedio = decimal.Round(NotaUnidad1 + NotaUnidad2 + NotaUnidad3 + NotaUnidad4,2);
+                        TPromedio = decimal.Round(NotaUnidad1 + NotaUnidad2 + NotaUnidad3 + NotaUnidad4, 2);
                         if (TPromedio > 0)
                         {
                             Promedio = TPromedio / CantidadUnidad;
@@ -510,6 +523,67 @@ namespace DiamDev.Colegio.UI.Controllers
 
                         DetalleNotas.Rows.Add(alumnoId, Correlativo, CursoActual, NotaUnidad1, NotaUnidad2, NotaUnidad3, NotaUnidad4, Promedio);
                         Correlativo++;
+                    }
+
+                    //Cursos Actitudinal
+                    foreach (string CursoActual in CursoActitudinalIds)
+                    {
+                        decimal NotaUnidad1 = 0;
+                        decimal NotaUnidad2 = 0;
+                        decimal NotaUnidad3 = 0;
+                        decimal NotaUnidad4 = 0;
+
+                        decimal TPromedio = 0;
+                        decimal Promedio = 0;
+
+                        int CantidadUnidad = 1;
+
+                        NotaModel TNotaUnidad1 = TNotas.Where(x => x.Curso.Equals(CursoActual) && x.UnidadId == 20201108001).FirstOrDefault();
+                        if (TNotaUnidad1 != null)
+                        {
+                            NotaUnidad1 = TNotaUnidad1.Nota;
+                        }
+
+                        NotaModel TNotaUnidad2 = TNotas.Where(x => x.Curso.Equals(CursoActual) && x.UnidadId == 20201108002).FirstOrDefault();
+                        if (TNotaUnidad2 != null)
+                        {
+                            NotaUnidad2 = TNotaUnidad2.Nota;
+
+                            if (NotaUnidad2 > 0)
+                            {
+                                CantidadUnidad = 2;
+                            }
+                        }
+
+                        NotaModel TNotaUnidad3 = TNotas.Where(x => x.Curso.Equals(CursoActual) && x.UnidadId == 20201108003).FirstOrDefault();
+                        if (TNotaUnidad3 != null)
+                        {
+                            NotaUnidad3 = TNotaUnidad3.Nota;
+
+                            if (NotaUnidad3 > 0)
+                            {
+                                CantidadUnidad = 3;
+                            }
+                        }
+
+                        NotaModel TNotaUnidad4 = TNotas.Where(x => x.Curso.Equals(CursoActual) && x.UnidadId == 20201108004).FirstOrDefault();
+                        if (TNotaUnidad4 != null)
+                        {
+                            NotaUnidad4 = TNotaUnidad4.Nota;
+
+                            if (NotaUnidad4 > 0)
+                            {
+                                CantidadUnidad = 4;
+                            }
+                        }
+
+                        TPromedio = decimal.Round(NotaUnidad1 + NotaUnidad2 + NotaUnidad3 + NotaUnidad4, 2);
+                        if (TPromedio > 0)
+                        {
+                            Promedio = TPromedio / CantidadUnidad;
+                        }
+
+                        DetalleActitudinalNotas.Rows.Add(alumnoId, CursoActual, NotaUnidad1, NotaUnidad2, NotaUnidad3, NotaUnidad4, Promedio);
                     }
                 }
 
@@ -525,6 +599,7 @@ namespace DiamDev.Colegio.UI.Controllers
                 Notas.Tables.Add(EncabezadoAlumno);
                 Notas.Tables.Add(DetalleNotas);
                 Notas.Tables.Add(Asistencia);
+                Notas.Tables.Add(DetalleActitudinalNotas);
 
                 // Se define la ruta del reporte
                 var reportPath = Server.MapPath("~/Reports/ReportNotaxAlumno.rdlc");

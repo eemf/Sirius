@@ -48,6 +48,25 @@ namespace DiamDev.Colegio.BLL
                 return Id;
             }
 
+            private int ActividadCorrelativo()
+            {
+                int Id = 1;
+
+                try
+                {
+                    Actividad ActividadActual = db.Set<Actividad>().AsNoTracking().Where(x => x.Fecha.Year == DateTime.Today.Year && x.Fecha.Month == DateTime.Today.Month && x.Fecha.Day == DateTime.Today.Day).OrderByDescending(x => x.Correlativo).FirstOrDefault();
+
+                    if (ActividadActual != null)
+                    {
+                        Id = ActividadActual.Correlativo + 1;
+                    }
+                }
+                catch (Exception)
+                { }
+
+                return Id;
+            }
+
             private string Agregar(Curso entidad)
             {
                 string Mensaje = "OK";               
@@ -75,6 +94,37 @@ namespace DiamDev.Colegio.BLL
                             }
 
                             db.Set<Curso>().Add(entidad);
+
+                            //Se verifica que contenga nota significa que es un curso actitudinal
+                            if (entidad.Nota > 0)
+                            {
+                                int ActividadId = ActividadCorrelativo();
+                                if (ActividadId > 0)
+                                {
+                                    if (entidad.Grados != null && entidad.Grados.Count() > 0)
+                                    {
+                                        entidad.Grados.ForEach(x =>
+                                        {                                            
+                                            db.Set<Actividad>().Add(new Actividad() { ActividadId = new Herramienta().Formato_Correlativo(ActividadId), ColegioId = entidad.ColegioId, CursoId = entidad.CursoId, GradoId = x.GradoId, SeccionId = 20201001001, CicloId = entidad.CicloId, UnidadId = 20201108001, TipoId = 20201108004, Nombre = entidad.Nombre, Descripcion = entidad.Nombre, NotaMaxima = entidad.Nota, FechaEntrega = DateTime.Today, ResponsableId = entidad.ResponsableId, Fecha = DateTime.Today, Correlativo = ActividadId });
+                                            ActividadId++;
+
+                                            db.Set<Actividad>().Add(new Actividad() { ActividadId = new Herramienta().Formato_Correlativo(ActividadId), ColegioId = entidad.ColegioId, CursoId = entidad.CursoId, GradoId = x.GradoId, SeccionId = 20201001001, CicloId = entidad.CicloId, UnidadId = 20201108002, TipoId = 20201108004, Nombre = entidad.Nombre, Descripcion = entidad.Nombre, NotaMaxima = entidad.Nota, FechaEntrega = DateTime.Today, ResponsableId = entidad.ResponsableId, Fecha = DateTime.Today, Correlativo = ActividadId });
+                                            ActividadId++;
+
+                                            db.Set<Actividad>().Add(new Actividad() { ActividadId = new Herramienta().Formato_Correlativo(ActividadId), ColegioId = entidad.ColegioId, CursoId = entidad.CursoId, GradoId = x.GradoId, SeccionId = 20201001001, CicloId = entidad.CicloId, UnidadId = 20201108003, TipoId = 20201108004, Nombre = entidad.Nombre, Descripcion = entidad.Nombre, NotaMaxima = entidad.Nota, FechaEntrega = DateTime.Today, ResponsableId = entidad.ResponsableId, Fecha = DateTime.Today, Correlativo = ActividadId });
+                                            ActividadId++;
+
+                                            db.Set<Actividad>().Add(new Actividad() { ActividadId = new Herramienta().Formato_Correlativo(ActividadId), ColegioId = entidad.ColegioId, CursoId = entidad.CursoId, GradoId = x.GradoId, SeccionId = 20201001001, CicloId = entidad.CicloId, UnidadId = 20201108004, TipoId = 20201108004, Nombre = entidad.Nombre, Descripcion = entidad.Nombre, NotaMaxima = entidad.Nota, FechaEntrega = DateTime.Today, ResponsableId = entidad.ResponsableId, Fecha = DateTime.Today, Correlativo = ActividadId });
+                                            ActividadId++;
+                                        });
+                                    }                               
+                                }
+                                else
+                                {
+                                    return "Se le informa que el curso actitudinal no se creo, por favor intente de nuevo";
+                                }
+                            }
+
                             db.SaveChanges();
                         }
                     }
@@ -96,8 +146,7 @@ namespace DiamDev.Colegio.BLL
                     Curso CursoActual = ObtenerxId(entidad.CursoId);
 
                     if (CursoActual.CursoId > 0)
-                    {
-                        CursoActual.TipoId = entidad.TipoId;
+                    {                        
                         CursoActual.Nombre = entidad.Nombre;
                         CursoActual.Abreviatura = entidad.Abreviatura;
                         CursoActual.Ministerial = entidad.Ministerial;
@@ -196,7 +245,7 @@ namespace DiamDev.Colegio.BLL
                 return Cursos;
             }
 
-            public List<Curso> ObtenerListado(bool todo, long colegioId)
+            public List<Curso> ObtenerListado(bool todo, long colegioId, long tipoId)
             {
                 List<Curso> Cursos = new List<Curso>();
                 long CicloId = 0;
@@ -211,11 +260,11 @@ namespace DiamDev.Colegio.BLL
 
                     if (todo)
                     {
-                        Cursos = db.Set<Curso>().Include("Ciclo").Include("Tipo").Include("Grados").AsNoTracking().Where(x => x.ColegioId == colegioId && x.CicloId == CicloId).OrderByDescending(x => x.Fecha).ThenByDescending(x => x.CursoId).Take(200).ToList();
+                        Cursos = db.Set<Curso>().Include("Ciclo").Include("Tipo").Include("Grados").AsNoTracking().Where(x => x.ColegioId == colegioId && x.CicloId == CicloId && x.TipoId == tipoId).OrderByDescending(x => x.Fecha).ThenByDescending(x => x.CursoId).Take(200).ToList();
                     }
                     else
                     {
-                        Cursos = db.Set<Curso>().AsNoTracking().Where(x => x.Activo && x.ColegioId == colegioId && x.CicloId == CicloId).Take(200).ToList();
+                        Cursos = db.Set<Curso>().AsNoTracking().Where(x => x.Activo && x.ColegioId == colegioId && x.CicloId == CicloId && x.TipoId == tipoId).Take(200).ToList();
                     }
                 }
                 catch (Exception)
@@ -224,7 +273,7 @@ namespace DiamDev.Colegio.BLL
                 return Cursos;
             }
 
-            public List<Curso> Buscar(string search, long colegioId)
+            public List<Curso> Buscar(string search, long colegioId, long tipoId)
             {
                 List<Curso> Cursos = new List<Curso>();
                 long CicloId = 0;
@@ -237,7 +286,7 @@ namespace DiamDev.Colegio.BLL
                         CicloId = CicloActual.CicloId;
                     }
 
-                    Cursos = db.Set<Curso>().Include("Ciclo").Include("Tipo").Include("Grados").AsNoTracking().Where(x => x.Nombre.ToLower().Contains(search.ToLower()) && x.ColegioId == colegioId && x.CicloId == CicloId).OrderByDescending(x => x.Fecha).ThenByDescending(x => x.CursoId).Take(200).ToList();
+                    Cursos = db.Set<Curso>().Include("Ciclo").Include("Tipo").Include("Grados").AsNoTracking().Where(x => x.Nombre.ToLower().Contains(search.ToLower()) && x.ColegioId == colegioId && x.CicloId == CicloId && x.TipoId == tipoId).OrderByDescending(x => x.Fecha).ThenByDescending(x => x.CursoId).Take(200).ToList();
                 }
                 catch (Exception)
                 { }

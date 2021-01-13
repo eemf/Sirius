@@ -7,5 +7,7 @@
         public string Curso { get; set; }
 
         public decimal Nota { get; set; }
+
+        public int Actitudinal { get; set; }
     }
 }

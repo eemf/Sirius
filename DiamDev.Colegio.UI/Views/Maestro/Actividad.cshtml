@@ -23,7 +23,7 @@
                     <input type="hidden" id="ColegioId" name="ColegioId" value="@Html.Raw(DiamDev.Colegio.UI.App_Start.CustomHelper.getColegioId())" />
                     <input type="hidden" id="CursoId" name="CursoId" value="@Html.Raw(Model.CursoId)" />
                     <input type="hidden" id="GradoId" name="GradoId" value="@Html.Raw(Model.GradoId)" />
-                    <input type="hidden" id="SeccionId" name="SeccionId" value="@Html.Raw(Model.SeccionId)" />
+                    <input type="hidden" id="SeccionId" name="SeccionId" value="@Html.Raw(Model.SeccionId)" />                    
                 </div>
             </div>
             <div class="row">
@@ -136,7 +136,7 @@
             <div class="row">
                 <p>
                     <div class="col-12">
-                        <a class="btn btn-danger btn-block" href="@Url.Action("Curso", "Maestro")">
+                        <a class="btn btn-danger btn-block" href="javascript:window.history.back();">
                             Regresar <i class="icon-prev"></i>
                         </a>
                     </div>
@@ -162,12 +162,19 @@
                             </label>
                             @Html.DropDownList("UnidadId", (SelectList)ViewBag.Unidades, "Seleccione una Unidad", new { @class = "form-control select2bs4", style = "width: 100%" })
                         </div>
-                        <div class="form-group">
-                            <label class="control-label">
-                                Tipo de Actividad
-                            </label>
-                            @Html.DropDownList("TipoId", (SelectList)ViewBag.Tipos, "Seleccione un Tipo de Actividad", new { @class = "form-control select2bs4", style = "width: 100%" })
-                        </div>
+                        @if (Model.Actitudinal == 0)
+                        {
+                            <div class="form-group">
+                                <label class="control-label">
+                                    Tipo de Actividad
+                                </label>
+                                @Html.DropDownList("TipoId", (SelectList)ViewBag.Tipos, "Seleccione un Tipo de Actividad", new { @class = "form-control select2bs4", style = "width: 100%" })
+                            </div>
+                        }
+                        else
+                        {
+                            <input type="hidden" id="TipoId" value="20201108004" />
+                        }
                         <div class="form-group">
                             <label class="control-label">
                                 Nombre de Actividad

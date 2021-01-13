@@ -12,7 +12,7 @@
   <xs:element name="Colegio" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="Colegio" msprop:Generator_UserDSName="Colegio">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="Colegio" msprop:Generator_TableClassName="ColegioDataTable" msprop:Generator_TableVarName="tableColegio" msprop:Generator_TablePropName="_Colegio" msprop:Generator_RowDeletingName="ColegioRowDeleting" msprop:Generator_RowChangingName="ColegioRowChanging" msprop:Generator_RowEvHandlerName="ColegioRowChangeEventHandler" msprop:Generator_RowDeletedName="ColegioRowDeleted" msprop:Generator_UserTableName="Colegio" msprop:Generator_RowChangedName="ColegioRowChanged" msprop:Generator_RowEvArgName="ColegioRowChangeEvent" msprop:Generator_RowClassName="ColegioRow">
+        <xs:element name="Colegio" msprop:Generator_TableClassName="ColegioDataTable" msprop:Generator_TableVarName="tableColegio" msprop:Generator_RowChangedName="ColegioRowChanged" msprop:Generator_TablePropName="_Colegio" msprop:Generator_RowDeletingName="ColegioRowDeleting" msprop:Generator_RowChangingName="ColegioRowChanging" msprop:Generator_RowEvHandlerName="ColegioRowChangeEventHandler" msprop:Generator_RowDeletedName="ColegioRowDeleted" msprop:Generator_RowClassName="ColegioRow" msprop:Generator_UserTableName="Colegio" msprop:Generator_RowEvArgName="ColegioRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="ColegioId" msprop:Generator_ColumnVarNameInTable="columnColegioId" msprop:Generator_ColumnPropNameInRow="ColegioId" msprop:Generator_ColumnPropNameInTable="ColegioIdColumn" msprop:Generator_UserColumnName="ColegioId" type="xs:string" minOccurs="0" />
@@ -23,7 +23,7 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="Alumno" msprop:Generator_TableClassName="AlumnoDataTable" msprop:Generator_TableVarName="tableAlumno" msprop:Generator_TablePropName="Alumno" msprop:Generator_RowDeletingName="AlumnoRowDeleting" msprop:Generator_RowChangingName="AlumnoRowChanging" msprop:Generator_RowEvHandlerName="AlumnoRowChangeEventHandler" msprop:Generator_RowDeletedName="AlumnoRowDeleted" msprop:Generator_UserTableName="Alumno" msprop:Generator_RowChangedName="AlumnoRowChanged" msprop:Generator_RowEvArgName="AlumnoRowChangeEvent" msprop:Generator_RowClassName="AlumnoRow">
+        <xs:element name="Alumno" msprop:Generator_TableClassName="AlumnoDataTable" msprop:Generator_TableVarName="tableAlumno" msprop:Generator_RowChangedName="AlumnoRowChanged" msprop:Generator_TablePropName="Alumno" msprop:Generator_RowDeletingName="AlumnoRowDeleting" msprop:Generator_RowChangingName="AlumnoRowChanging" msprop:Generator_RowEvHandlerName="AlumnoRowChangeEventHandler" msprop:Generator_RowDeletedName="AlumnoRowDeleted" msprop:Generator_RowClassName="AlumnoRow" msprop:Generator_UserTableName="Alumno" msprop:Generator_RowEvArgName="AlumnoRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="AlumnoId" msprop:Generator_ColumnVarNameInTable="columnAlumnoId" msprop:Generator_ColumnPropNameInRow="AlumnoId" msprop:Generator_ColumnPropNameInTable="AlumnoIdColumn" msprop:Generator_UserColumnName="AlumnoId" type="xs:string" minOccurs="0" />
@@ -36,7 +36,7 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="Notas" msprop:Generator_TableClassName="NotasDataTable" msprop:Generator_TableVarName="tableNotas" msprop:Generator_TablePropName="Notas" msprop:Generator_RowDeletingName="NotasRowDeleting" msprop:Generator_RowChangingName="NotasRowChanging" msprop:Generator_RowEvHandlerName="NotasRowChangeEventHandler" msprop:Generator_RowDeletedName="NotasRowDeleted" msprop:Generator_UserTableName="Notas" msprop:Generator_RowChangedName="NotasRowChanged" msprop:Generator_RowEvArgName="NotasRowChangeEvent" msprop:Generator_RowClassName="NotasRow">
+        <xs:element name="Notas" msprop:Generator_TableClassName="NotasDataTable" msprop:Generator_TableVarName="tableNotas" msprop:Generator_RowChangedName="NotasRowChanged" msprop:Generator_TablePropName="Notas" msprop:Generator_RowDeletingName="NotasRowDeleting" msprop:Generator_RowChangingName="NotasRowChanging" msprop:Generator_RowEvHandlerName="NotasRowChangeEventHandler" msprop:Generator_RowDeletedName="NotasRowDeleted" msprop:Generator_RowClassName="NotasRow" msprop:Generator_UserTableName="Notas" msprop:Generator_RowEvArgName="NotasRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="AlumnoId" msprop:Generator_ColumnVarNameInTable="columnAlumnoId" msprop:Generator_ColumnPropNameInRow="AlumnoId" msprop:Generator_ColumnPropNameInTable="AlumnoIdColumn" msprop:Generator_UserColumnName="AlumnoId" type="xs:string" minOccurs="0" />
@@ -50,7 +50,7 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="Asistencias" msprop:Generator_TableClassName="AsistenciasDataTable" msprop:Generator_TableVarName="tableAsistencias" msprop:Generator_RowChangedName="AsistenciasRowChanged" msprop:Generator_TablePropName="Asistencias" msprop:Generator_RowDeletingName="AsistenciasRowDeleting" msprop:Generator_RowChangingName="AsistenciasRowChanging" msprop:Generator_RowEvHandlerName="AsistenciasRowChangeEventHandler" msprop:Generator_RowDeletedName="AsistenciasRowDeleted" msprop:Generator_RowClassName="AsistenciasRow" msprop:Generator_UserTableName="Asistencias" msprop:Generator_RowEvArgName="AsistenciasRowChangeEvent">
+        <xs:element name="Asistencias" msprop:Generator_TableClassName="AsistenciasDataTable" msprop:Generator_TableVarName="tableAsistencias" msprop:Generator_TablePropName="Asistencias" msprop:Generator_RowDeletingName="AsistenciasRowDeleting" msprop:Generator_RowChangingName="AsistenciasRowChanging" msprop:Generator_RowEvHandlerName="AsistenciasRowChangeEventHandler" msprop:Generator_RowDeletedName="AsistenciasRowDeleted" msprop:Generator_UserTableName="Asistencias" msprop:Generator_RowChangedName="AsistenciasRowChanged" msprop:Generator_RowEvArgName="AsistenciasRowChangeEvent" msprop:Generator_RowClassName="AsistenciasRow">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="AlumnoId" msprop:Generator_ColumnVarNameInTable="columnAlumnoId" msprop:Generator_ColumnPropNameInRow="AlumnoId" msprop:Generator_ColumnPropNameInTable="AlumnoIdColumn" msprop:Generator_UserColumnName="AlumnoId" type="xs:string" minOccurs="0" />
@@ -60,7 +60,7 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="AsistenciaResumen" msprop:Generator_TableClassName="AsistenciaResumenDataTable" msprop:Generator_TableVarName="tableAsistenciaResumen" msprop:Generator_TablePropName="AsistenciaResumen" msprop:Generator_RowDeletingName="AsistenciaResumenRowDeleting" msprop:Generator_RowChangingName="AsistenciaResumenRowChanging" msprop:Generator_RowEvHandlerName="AsistenciaResumenRowChangeEventHandler" msprop:Generator_RowDeletedName="AsistenciaResumenRowDeleted" msprop:Generator_UserTableName="AsistenciaResumen" msprop:Generator_RowChangedName="AsistenciaResumenRowChanged" msprop:Generator_RowEvArgName="AsistenciaResumenRowChangeEvent" msprop:Generator_RowClassName="AsistenciaResumenRow">
+        <xs:element name="AsistenciaResumen" msprop:Generator_TableClassName="AsistenciaResumenDataTable" msprop:Generator_TableVarName="tableAsistenciaResumen" msprop:Generator_RowChangedName="AsistenciaResumenRowChanged" msprop:Generator_TablePropName="AsistenciaResumen" msprop:Generator_RowDeletingName="AsistenciaResumenRowDeleting" msprop:Generator_RowChangingName="AsistenciaResumenRowChanging" msprop:Generator_RowEvHandlerName="AsistenciaResumenRowChangeEventHandler" msprop:Generator_RowDeletedName="AsistenciaResumenRowDeleted" msprop:Generator_RowClassName="AsistenciaResumenRow" msprop:Generator_UserTableName="AsistenciaResumen" msprop:Generator_RowEvArgName="AsistenciaResumenRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="AlumnoId" msprop:Generator_ColumnVarNameInTable="columnAlumnoId" msprop:Generator_ColumnPropNameInRow="AlumnoId" msprop:Generator_ColumnPropNameInTable="AlumnoIdColumn" msprop:Generator_UserColumnName="AlumnoId" type="xs:string" minOccurs="0" />
@@ -70,14 +70,28 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
+        <xs:element name="Notas_Actitudinal" msprop:Generator_TableClassName="Notas_ActitudinalDataTable" msprop:Generator_TableVarName="tableNotas_Actitudinal" msprop:Generator_TablePropName="Notas_Actitudinal" msprop:Generator_RowDeletingName="Notas_ActitudinalRowDeleting" msprop:Generator_RowChangingName="Notas_ActitudinalRowChanging" msprop:Generator_RowEvHandlerName="Notas_ActitudinalRowChangeEventHandler" msprop:Generator_RowDeletedName="Notas_ActitudinalRowDeleted" msprop:Generator_UserTableName="Notas_Actitudinal" msprop:Generator_RowChangedName="Notas_ActitudinalRowChanged" msprop:Generator_RowEvArgName="Notas_ActitudinalRowChangeEvent" msprop:Generator_RowClassName="Notas_ActitudinalRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="AlumnoId" msprop:Generator_ColumnVarNameInTable="columnAlumnoId" msprop:Generator_ColumnPropNameInRow="AlumnoId" msprop:Generator_ColumnPropNameInTable="AlumnoIdColumn" msprop:Generator_UserColumnName="AlumnoId" type="xs:string" minOccurs="0" />
+              <xs:element name="Curso" msprop:Generator_ColumnVarNameInTable="columnCurso" msprop:Generator_ColumnPropNameInRow="Curso" msprop:Generator_ColumnPropNameInTable="CursoColumn" msprop:Generator_UserColumnName="Curso" type="xs:string" minOccurs="0" />
+              <xs:element name="Unidad1" msprop:Generator_ColumnVarNameInTable="columnUnidad1" msprop:Generator_ColumnPropNameInRow="Unidad1" msprop:Generator_ColumnPropNameInTable="Unidad1Column" msprop:Generator_UserColumnName="Unidad1" type="xs:decimal" minOccurs="0" />
+              <xs:element name="Unidad2" msprop:Generator_ColumnVarNameInTable="columnUnidad2" msprop:Generator_ColumnPropNameInRow="Unidad2" msprop:Generator_ColumnPropNameInTable="Unidad2Column" msprop:Generator_UserColumnName="Unidad2" type="xs:decimal" minOccurs="0" />
+              <xs:element name="Unidad3" msprop:Generator_ColumnVarNameInTable="columnUnidad3" msprop:Generator_ColumnPropNameInRow="Unidad3" msprop:Generator_ColumnPropNameInTable="Unidad3Column" msprop:Generator_UserColumnName="Unidad3" type="xs:decimal" minOccurs="0" />
+              <xs:element name="Unidad4" msprop:Generator_ColumnVarNameInTable="columnUnidad4" msprop:Generator_ColumnPropNameInRow="Unidad4" msprop:Generator_ColumnPropNameInTable="Unidad4Column" msprop:Generator_UserColumnName="Unidad4" type="xs:decimal" minOccurs="0" />
+              <xs:element name="Total" msprop:Generator_ColumnVarNameInTable="columnTotal" msprop:Generator_ColumnPropNameInRow="Total" msprop:Generator_ColumnPropNameInTable="TotalColumn" msprop:Generator_UserColumnName="Total" type="xs:decimal" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
       </xs:choice>
     </xs:complexType>
   </xs:element>
   <xs:annotation>
     <xs:appinfo>
-      <msdata:Relationship name="Alumno_Notas" msdata:parent="Alumno" msdata:child="Notas" msdata:parentkey="AlumnoId" msdata:childkey="AlumnoId" msprop:Generator_UserChildTable="Notas" msprop:Generator_ChildPropName="GetNotasRows" msprop:Generator_UserRelationName="Alumno_Notas" msprop:Generator_ParentPropName="AlumnoRow" msprop:Generator_RelationVarName="relationAlumno_Notas" msprop:Generator_UserParentTable="Alumno" />
-      <msdata:Relationship name="Alumno_Asistencias" msdata:parent="Alumno" msdata:child="Asistencias" msdata:parentkey="AlumnoId" msdata:childkey="AlumnoId" msprop:Generator_UserChildTable="Asistencias" msprop:Generator_ChildPropName="GetAsistenciasRows" msprop:Generator_UserRelationName="Alumno_Asistencias" msprop:Generator_RelationVarName="relationAlumno_Asistencias" msprop:Generator_UserParentTable="Alumno" msprop:Generator_ParentPropName="AlumnoRow" />
-      <msdata:Relationship name="Alumno_AsistenciaResumen" msdata:parent="Alumno" msdata:child="AsistenciaResumen" msdata:parentkey="AlumnoId" msdata:childkey="AlumnoId" msprop:Generator_UserChildTable="AsistenciaResumen" msprop:Generator_ChildPropName="GetAsistenciaResumenRows" msprop:Generator_UserRelationName="Alumno_AsistenciaResumen" msprop:Generator_ParentPropName="AlumnoRow" msprop:Generator_RelationVarName="relationAlumno_AsistenciaResumen" msprop:Generator_UserParentTable="Alumno" />
+      <msdata:Relationship name="Alumno_Notas" msdata:parent="Alumno" msdata:child="Notas" msdata:parentkey="AlumnoId" msdata:childkey="AlumnoId" msprop:Generator_UserChildTable="Notas" msprop:Generator_ChildPropName="GetNotasRows" msprop:Generator_UserRelationName="Alumno_Notas" msprop:Generator_RelationVarName="relationAlumno_Notas" msprop:Generator_UserParentTable="Alumno" msprop:Generator_ParentPropName="AlumnoRow" />
+      <msdata:Relationship name="Alumno_Asistencias" msdata:parent="Alumno" msdata:child="Asistencias" msdata:parentkey="AlumnoId" msdata:childkey="AlumnoId" msprop:Generator_UserChildTable="Asistencias" msprop:Generator_ChildPropName="GetAsistenciasRows" msprop:Generator_UserRelationName="Alumno_Asistencias" msprop:Generator_ParentPropName="AlumnoRow" msprop:Generator_RelationVarName="relationAlumno_Asistencias" msprop:Generator_UserParentTable="Alumno" />
+      <msdata:Relationship name="Alumno_AsistenciaResumen" msdata:parent="Alumno" msdata:child="AsistenciaResumen" msdata:parentkey="AlumnoId" msdata:childkey="AlumnoId" msprop:Generator_UserChildTable="AsistenciaResumen" msprop:Generator_ChildPropName="GetAsistenciaResumenRows" msprop:Generator_UserRelationName="Alumno_AsistenciaResumen" msprop:Generator_RelationVarName="relationAlumno_AsistenciaResumen" msprop:Generator_UserParentTable="Alumno" msprop:Generator_ParentPropName="AlumnoRow" />
+      <msdata:Relationship name="Alumno_Notas_Actitudinal" msdata:parent="Alumno" msdata:child="Notas_Actitudinal" msdata:parentkey="AlumnoId" msdata:childkey="AlumnoId" msprop:Generator_UserChildTable="Notas_Actitudinal" msprop:Generator_ChildPropName="GetNotas_ActitudinalRows" msprop:Generator_UserRelationName="Alumno_Notas_Actitudinal" msprop:Generator_ParentPropName="AlumnoRow" msprop:Generator_RelationVarName="relationAlumno_Notas_Actitudinal" msprop:Generator_UserParentTable="Alumno" />
     </xs:appinfo>
   </xs:annotation>
 </xs:schema>

@@ -2686,6 +2686,7 @@
     <Compile Include="App_Start\PermisoAttribute.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\SeguridadAttribute.cs" />
+    <Compile Include="Controllers\Curso_ActitudinalController.cs" />
     <Compile Include="Controllers\InscripcionController.cs" />
     <Compile Include="Controllers\AlumnoController.cs" />
     <Compile Include="Controllers\EncargadoController.cs" />
@@ -2823,6 +2824,11 @@
     <Content Include="Views\Grado\Nota_x_Alumno.cshtml" />
     <Content Include="Views\Maestro\Nota_x_Alumno.cshtml" />
     <Content Include="Views\Maestro\Nota_x_Grado.cshtml" />
+    <Content Include="Views\Curso_Actitudinal\_CreateOrEdit.cshtml" />
+    <Content Include="Views\Curso_Actitudinal\Crear.cshtml" />
+    <Content Include="Views\Curso_Actitudinal\Editar.cshtml" />
+    <Content Include="Views\Curso_Actitudinal\Index.cshtml" />
+    <Content Include="Views\Maestro\Curso_Actitudinal.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

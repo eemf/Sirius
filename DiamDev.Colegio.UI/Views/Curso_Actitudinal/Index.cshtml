@@ -2,12 +2,12 @@
 @using PagedList.Mvc;
 
 @{
-    ViewBag.Title = "Curso Listado";
+    ViewBag.Title = "Curso Actitudinal Listado";
 }
 
 <div class="row">
     <div class="col-3">
-        <a class="btn btn-block btn-primary" href="@Url.Action("Crear", "Curso")">
+        <a class="btn btn-block btn-primary" href="@Url.Action("Crear", "Curso_Actitudinal")">
             Nuevo
             <i class="fas fa-arrow-circle-right"></i>
         </a>
@@ -16,7 +16,7 @@
 <br />
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">Curso</h3>
+        <h3 class="card-title">Curso Actitudinal</h3>
         <div class="card-tools">
             <form action="" method="get" class="form-inline">
                 <div class="input-group well">
@@ -35,9 +35,8 @@
             <thead>
                 <tr>
                     <th>Ciclo</th>                    
-                    <th>Curso</th>
-                    <th>Grados</th>
-                    <th>Curso Ministerial</th>
+                    <th>Curso Actitudinal</th>
+                    <th>Grados</th>                    
                     <th>Activo</th>
                     <th></th>
                 </tr>
@@ -48,12 +47,11 @@
                     <tr>
                         <td>@(Curso.Ciclo == null ? "No Disponible" : Curso.Ciclo.Nombre)</td>                        
                         <td>@Curso.Nombre</td>
-                        <td>@(Curso.Grados == null ? 0 : Curso.Grados.Count())</td>
-                        <td>@(Curso.Ministerial ? "Sí" : "No")</td>
+                        <td>@(Curso.Grados == null ? 0 : Curso.Grados.Count())</td>                        
                         <td>@(Curso.Activo ? "Sí" : "No")</td>
                         <td>
                             <span class="table-remove">
-                                <a title="Editar" href="@Url.Action("Editar", "Curso", new { id = Curso.CursoId })" class="btn btn-primary btn-rounded btn-sm my-0"><i class="fas fa-pencil-alt"></i></a>
+                                <a title="Editar" href="@Url.Action("Editar", "Curso_Actitudinal", new { id = Curso.CursoId })" class="btn btn-primary btn-rounded btn-sm my-0"><i class="fas fa-pencil-alt"></i></a>
                             </span>
                         </td>
                     </tr>
@@ -76,7 +74,7 @@
         {
             if ('@TempData["Curso-Success"]' == "OK")
             {
-                toastr.success('El curso se guardó exitosamente');
+                toastr.success('El curso actitudinal se guardó exitosamente');
             }
         });
     </script>

@@ -13,7 +13,7 @@ namespace DiamDev.Colegio.UI.Controllers
     [Authorize]
     [Seguridad]
     [HandleError]
-    public class CursoController : Controller
+    public class Curso_ActitudinalController : Controller
     {
         #region Metodos Privados
 
@@ -26,11 +26,11 @@ namespace DiamDev.Colegio.UI.Controllers
 
         #endregion
 
-        // GET: Curso
+        // GET: Curso_Actitudinal
         [Permiso("Colegio.Curso.Ver_Listado")]
         public ActionResult Index(int? page, string search)
         {
-            CustomHelper.setTitulo("Curso", "Listado");
+            CustomHelper.setTitulo("Curso Actitudinal", "Listado");
 
             List<Curso> Cursos = new List<Curso>();
 
@@ -38,11 +38,11 @@ namespace DiamDev.Colegio.UI.Controllers
             {
                 if (!string.IsNullOrWhiteSpace(search) && search != null)
                 {
-                    Cursos = new CursoBL().Buscar(search, CustomHelper.getColegioId(), 20201009001).ToList();
+                    Cursos = new CursoBL().Buscar(search, CustomHelper.getColegioId(), 20201009002).ToList();
                 }
                 else
                 {
-                    Cursos = new CursoBL().ObtenerListado(true, CustomHelper.getColegioId(), 20201009001);
+                    Cursos = new CursoBL().ObtenerListado(true, CustomHelper.getColegioId(), 20201009002);
                 }
             }
             catch (Exception ex)
@@ -61,12 +61,9 @@ namespace DiamDev.Colegio.UI.Controllers
         [Permiso("Colegio.Curso.Crear")]
         public ActionResult Crear()
         {
-            CustomHelper.setTitulo("Curso", "Nuevo");
+            CustomHelper.setTitulo("Curso Actitudinal", "Nuevo");
 
-            string strAtributo = "checked='checked'";
-
-            ViewBag.MinisterialSi = strAtributo;
-            ViewBag.MinisterialNo = "";
+            string strAtributo = "checked='checked'";         
 
             ViewBag.ActivoSi = strAtributo;
             ViewBag.ActivoNo = "";
@@ -77,11 +74,11 @@ namespace DiamDev.Colegio.UI.Controllers
 
         [HttpPost]
         [Permiso("Colegio.Curso.Crear")]
-        public ActionResult Crear(Curso modelo, bool ministerial, bool activo, long[] gradoIds, string[] nombreGradoIds)
+        public ActionResult Crear(Curso modelo, bool activo, long[] gradoIds, string[] nombreGradoIds)
         {
             if (gradoIds == null || gradoIds.Length == 0)
             {
-                ModelState.AddModelError("", "Se le informa que debe de asignar un grado al curso");
+                ModelState.AddModelError("", "Se le informa que debe de asignar un grado al curso actitudinal");
             }
             else
             {
@@ -98,8 +95,9 @@ namespace DiamDev.Colegio.UI.Controllers
             if (ModelState.IsValid)
             {
                 modelo.ColegioId = CustomHelper.getColegioId();
-                modelo.TipoId = 20201009001;
-                modelo.Ministerial = ministerial;
+                modelo.ResponsableId = CustomHelper.getUsuarioId();
+                modelo.TipoId = 20201009002;
+                modelo.Ministerial = false;
                 modelo.Activo = activo;               
 
                 string strMensaje = new CursoBL().Guardar(modelo);
@@ -115,10 +113,7 @@ namespace DiamDev.Colegio.UI.Controllers
                 }
             }
 
-            string strAtributo = "checked='checked'";
-
-            ViewBag.MinisterialSi = ministerial == true ? strAtributo : "";
-            ViewBag.MinisterialNo = ministerial == false ? strAtributo : "";
+            string strAtributo = "checked='checked'";         
 
             ViewBag.ActivoSi = activo == true ? strAtributo : "";
             ViewBag.ActivoNo = activo == false ? strAtributo : "";
@@ -140,12 +135,9 @@ namespace DiamDev.Colegio.UI.Controllers
                 return HttpNotFound();
             }
 
-            CustomHelper.setTitulo("Curso", "Editar");          
+            CustomHelper.setTitulo("Curso Actitudinal", "Editar");          
 
-            string strAtributo = "checked='checked'";
-
-            ViewBag.MinisterialSi = CursoActual.Ministerial == true ? strAtributo : "";
-            ViewBag.MinisterialNo = CursoActual.Ministerial == false ? strAtributo : "";
+            string strAtributo = "checked='checked'";         
 
             ViewBag.ActivoSi = CursoActual.Activo == true ? strAtributo : "";
             ViewBag.ActivoNo = CursoActual.Activo == false ? strAtributo : "";
@@ -176,11 +168,11 @@ namespace DiamDev.Colegio.UI.Controllers
 
         [HttpPost]
         [Permiso("Colegio.Curso.Editar")]
-        public ActionResult Editar(Curso modelo, bool ministerial, bool activo, long[] gradoIds, string[] nombreGradoIds)
+        public ActionResult Editar(Curso modelo, bool activo, long[] gradoIds, string[] nombreGradoIds)
         {
             if (gradoIds == null || gradoIds.Length == 0)
             {
-                ModelState.AddModelError("", "Se le informa que debe de asignar un grado al curso");
+                ModelState.AddModelError("", "Se le informa que debe de asignar un grado al curso actitudinal");
             }
             else
             {
@@ -196,7 +188,7 @@ namespace DiamDev.Colegio.UI.Controllers
 
             if (ModelState.IsValid)
             {
-                modelo.Ministerial = ministerial;
+                modelo.Ministerial = false;
                 modelo.Activo = activo;
 
                 string strMensaje = new CursoBL().Guardar(modelo);
@@ -212,10 +204,7 @@ namespace DiamDev.Colegio.UI.Controllers
                 }
             }
 
-            string strAtributo = "checked='checked'";
-
-            ViewBag.MinisterialSi = ministerial == true ? strAtributo : "";
-            ViewBag.MinisterialNo = ministerial == false ? strAtributo : "";
+            string strAtributo = "checked='checked'";          
 
             ViewBag.ActivoSi = activo == true ? strAtributo : "";
             ViewBag.ActivoNo = activo == false ? strAtributo : "";
@@ -225,14 +214,6 @@ namespace DiamDev.Colegio.UI.Controllers
 
             this.CargaControles();
             return View(modelo);
-        }
-
-        [ActionName("ObtenerCursoxGrado")]
-        public JsonResult ObtenerCursoxGrado(long id)
-        {
-            IList _result = new List<SelectListItem>();
-            _result = new CursoBL().ObtenerxGradoId(id, CustomHelper.getColegioId()).Select(m => new SelectListItem() { Text = m.Nombre, Value = m.CursoId.ToString() }).ToList();
-            return Json(_result, JsonRequestBehavior.AllowGet);
         }
     }
 }

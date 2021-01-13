@@ -27,6 +27,8 @@ namespace DiamDev.Colegio.Entities
 
         public int Actividad { get; set; }
 
+        public int Actitudinal { get; set; }
+
         public List<ActividadModel> Actividades { get; set; }
 
         public List<CuadroxCursoModel> Cuadros { get; set; }

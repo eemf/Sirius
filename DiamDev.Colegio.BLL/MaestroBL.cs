@@ -409,7 +409,7 @@ namespace DiamDev.Colegio.BLL
                 return CursoActual;
             }
 
-            public List<CursoMaestroModel> ObtenerCursosAsignadoxID(long colegioId, long maestroId) 
+            public List<CursoMaestroModel> ObtenerCursosAsignadoxID(long colegioId, long maestroId, int actitudinal) 
             {
                 List<CursoMaestroModel> Cursos = new List<CursoMaestroModel>();
 
@@ -419,8 +419,8 @@ namespace DiamDev.Colegio.BLL
                     Ciclo CicloActual = db.Set<Ciclo>().AsNoTracking().Where(x => x.ColegioId == colegioId && x.Activo).OrderByDescending(x => x.Fecha).ThenByDescending(x => x.CicloId).FirstOrDefault();
                     if (CicloActual != null)
                     {
-                        Cursos = db.Database.SqlQuery<CursoMaestroModel>("dbo.sp_consulta_curso_asignados_x_maestro @ColegioId, @MaestroId, @CicloId", new SqlParameter("@ColegioId", colegioId), new SqlParameter("@MaestroId", maestroId), new SqlParameter("@CicloId", CicloActual.CicloId)).ToList();
-                    }
+                        Cursos = db.Database.SqlQuery<CursoMaestroModel>("dbo.sp_consulta_curso_asignados_x_maestro @ColegioId, @MaestroId, @CicloId, @Actitudinal", new SqlParameter("@ColegioId", colegioId), new SqlParameter("@MaestroId", maestroId), new SqlParameter("@CicloId", CicloActual.CicloId), new SqlParameter("@Actitudinal", actitudinal)).ToList();
+                    }               
                 }
                 catch (Exception)
                 {}

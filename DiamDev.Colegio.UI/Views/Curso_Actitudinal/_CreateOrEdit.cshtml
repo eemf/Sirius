@@ -4,30 +4,13 @@
     <div class="col-12">      
         <div class="form-group">
             <label class="control-label">
-                Curso<span class="symbol required"></span>
+                Curso Actitudinal<span class="symbol required"></span>
             </label>
-            @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @placeholder = "Nombre del Curso", required = "required", autocomplete = "off" })
+            @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @placeholder = "Nombre del Curso Actitudinal", required = "required", autocomplete = "off" })
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-6">
-        <div class="form-group">
-            <label class="control-label">
-                Curso Ministerial
-            </label>
-            <div>
-                <label class="radio-inline">
-                    <input type="radio" class="grey" value="true" @ViewBag.MinisterialSi name="ministerial" id="MinisterialSi">
-                    Sí
-                </label>
-                <label class="radio-inline">
-                    <input type="radio" class="grey" value="false" @ViewBag.MinisterialNo name="ministerial" id="MinisterialNo">
-                    No
-                </label>
-            </div>
-        </div>
-    </div>
+<div class="row">   
     <div class="col-6">
         <div class="form-group">
             <label class="control-label">
